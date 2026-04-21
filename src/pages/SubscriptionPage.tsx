@@ -9,7 +9,7 @@ export function SubscriptionPage() {
           className="beauty-content-col"
           style={{
             maxWidth: "860px",
-            margin: "0 auto",
+            margin: "0 auto 0 0",
             padding: "32px 20px 96px",
             display: "flex",
             flexDirection: "column",
