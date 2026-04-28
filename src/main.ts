@@ -19,7 +19,9 @@ import {
   TranslationContext,
   LoginServiceContext,
   type RouterService,
-  loginService as createLoginService,
+  createLoginService,
+  createApiLoginAdapter,
+  createMockLoginAdapter,
   createMockCustomerAdapter,
   createApiCustomerAdapter,
   createMockOrderAdapter,
@@ -213,12 +215,18 @@ async function initializeTheme() {
   const useMock = resolveMockMode(import.meta.env.VITE_MOCK_MODE);
 
   // 2. Create login service
+  const loginAdapter = useMock
+    ? createMockLoginAdapter()
+    : createApiLoginAdapter((path, init) => fetch("/api" + path, init), {
+        shopDomain,
+        appUrl: window.location.origin,
+      });
   const loginServiceInstance = createLoginService({
+    adapter: loginAdapter,
     shop: {
       domain: shopDomain,
-      rootUrl: import.meta.env.VITE_API_URL ?? "http://localhost:3000",
+      locale: preferredLocale,
     },
-    getLocale: () => preferredLocale,
     router: {
       push({ path }: { path: string }) {
         const routeName = path.replace(/^\//, "") || "subscription";

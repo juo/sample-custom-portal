@@ -65,7 +65,7 @@ Notes:
 | Variable                         | Required      | Default                                       | Description                                                                           |
 | -------------------------------- | ------------- | --------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `VITE_MOCK_MODE`                 | No            | `true`                                        | Use mock adapters (`true`) or real API adapters (`false`).                            |
-| `VITE_API_URL`                   | Real API mode | `http://localhost:3000`                       | Backend root URL used by login + API integrations.                                    |
+| `VITE_API_URL`                   | Real API mode | `https://api.juo.io`                          | Backend root URL used by login + API integrations.                                    |
 | `VITE_SHOP_DOMAIN`               | Real API mode | `beauty-box.myshopify.com`                    | Shopify domain used for auth + request headers. Also used to derive editor store URL. |
 | `VITE_BLOCKS_EXTENSIONS_VERSION` | No            | `1.2.0`                                       | Extension package version used in default CDN URL.                                    |
 | `VITE_BLOCKS_EXTENSIONS_URL`     | No            | Derived from `VITE_BLOCKS_EXTENSIONS_VERSION` | Optional full override for remote extension blocks URL.                               |
@@ -116,6 +116,3 @@ The sample uses three routes:
 - `/`
 - `/orders`
 
-## Notes
-
-- This repository is intended as a public reference template, not an npm package.

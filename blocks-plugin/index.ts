@@ -85,7 +85,7 @@ export function blocksThemePlugin(): Plugin {
         server: {
           proxy: {
             "/api": {
-              target: process.env.BACKEND_URL ?? "http://127.0.0.1:3000",
+              target: process.env.BACKEND_URL ?? "https://api.juo.io",
               changeOrigin: true,
               rewrite: (p: string) => p.replace(/^\/api/, ""),
             },

@@ -45,15 +45,14 @@ export function BeautyUpsell({
   const [failedProductImageIds, setFailedProductImageIds] = useState(new Set<string>());
 
   useEffect(() => {
+    if (!subscriptionId) return;
     setLoading(true);
-    void subscriptionService
-      .getUpsellProducts({ subscriptionId: subscriptionId ?? "" })
-      .then((result) => {
-        if (result._tag === "Success") {
-          setProducts(result.data);
-        }
-        setLoading(false);
-      });
+    void subscriptionService.getUpsellProducts({ subscriptionId }).then((result) => {
+      if (result._tag === "Success") {
+        setProducts(result.data);
+      }
+      setLoading(false);
+    });
   }, [subscriptionId]);
 
   async function handleAdd(product: UpsellProduct) {
