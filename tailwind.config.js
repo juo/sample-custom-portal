@@ -15,8 +15,6 @@ export default {
         "beauty-sand": "#C4A882",
       },
       fontFamily: {
-        sans: ["quasimoda", "sans-serif"],
-        serif: ["ivypresto-display", "serif"],
         code: ["source-code-pro", "monospace"],
         ivyPresto: ["ivypresto-display", "serif"],
         ivyprestoHeadline: ["ivypresto-headline", "serif"],

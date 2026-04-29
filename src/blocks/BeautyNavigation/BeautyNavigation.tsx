@@ -3,12 +3,12 @@ import { useContext } from "@juo/blocks/react";
 import { RouterServiceContext, LoginServiceContext } from "@juo/blocks";
 import { getRouteNameFromPathname } from "../../lib/router";
 
-type NavItemKey = "subscription" | "orders" | "history";
+type NavItemKey = "subscription" | "orders" | "history" | "aktualnosci" | "adresy";
 
 interface NavItemConfig {
   icon: string;
   route: string;
-  labelProp: "subscriptionLabel" | "ordersLabel" | "historyLabel";
+  labelProp: "subscriptionLabel" | "ordersLabel" | "historyLabel" | "aktualnosciLabel" | "adresyLabel";
 }
 
 const NAV_ITEM_CONFIG: Record<NavItemKey, NavItemConfig> = {
@@ -19,6 +19,8 @@ const NAV_ITEM_CONFIG: Record<NavItemKey, NavItemConfig> = {
   },
   orders: { icon: "📦", route: "orders", labelProp: "ordersLabel" },
   history: { icon: "📋", route: "history", labelProp: "historyLabel" },
+  aktualnosci: { icon: "📰", route: "aktualnosci", labelProp: "aktualnosciLabel" },
+  adresy: { icon: "📍", route: "adresy", labelProp: "adresyLabel" },
 };
 
 interface Props {
@@ -27,6 +29,8 @@ interface Props {
   subscriptionLabel: string;
   ordersLabel: string;
   historyLabel: string;
+  aktualnosciLabel: string;
+  adresyLabel: string;
   logoutIcon: string;
   logoutLabel: string;
 }
@@ -35,8 +39,10 @@ export function BeautyNavigation({
   brandName,
   navItems,
   subscriptionLabel,
-  historyLabel,
   ordersLabel,
+  historyLabel,
+  aktualnosciLabel,
+  adresyLabel,
   logoutIcon,
   logoutLabel,
 }: Props) {
@@ -46,6 +52,8 @@ export function BeautyNavigation({
     subscriptionLabel,
     ordersLabel,
     historyLabel,
+    aktualnosciLabel,
+    adresyLabel,
   };
   const [activeRoute, setActiveRoute] = useState(() =>
     getRouteNameFromPathname(window.location.pathname),

@@ -52,6 +52,8 @@ const routes = {
   "/": { name: "Subscription", pageComponent: "BeautySubscriptionPage" },
   "/orders": { name: "Orders", pageComponent: "BeautyOrdersPage" },
   "/history": { name: "Orders", pageComponent: "BeautyOrdersPage" },
+  "/aktualnosci": { name: "Aktualności", pageComponent: "BeautyAktualnosciPage" },
+  "/adresy": { name: "Twoje adresy", pageComponent: "BeautyAdresyPage" },
 } as const;
 
 type BlockExtensionsModule = {
