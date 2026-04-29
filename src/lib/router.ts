@@ -9,11 +9,13 @@ const routeNameToPath: Record<string, string> = {
   subscription: "/",
   login: "/login",
   orders: "/orders",
+  history: "/history",
 };
 
 export function getRouteNameFromPathname(pathname: string): string {
   if (pathname === "/login") return "login";
   if (pathname === "/orders") return "orders";
+  if (pathname === "/history") return "history";
   return "subscription";
 }
 
@@ -74,6 +76,7 @@ export function createBeautyRouterService(): RouterService {
         { title: "Login", path: "/login", block: "BeautyLoginPage" },
         { title: "Subscription", path: "/", block: "BeautySubscriptionPage" },
         { title: "Orders", path: "/orders", block: "BeautyOrdersPage" },
+        { title: "Historia zamówień", path: "/history", block: "BeautyOrdersPage" },
       ];
     },
   };

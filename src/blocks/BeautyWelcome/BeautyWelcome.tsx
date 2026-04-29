@@ -43,7 +43,10 @@ export function BeautyWelcome({ greetingPrefix, subtitle, showSubtitle }: Props)
         </div>
       ) : (
         <div>
-          <h2 className="text-2xl font-bold mb-xs" style={{ color: "var(--accent-900)" }}>
+          <h2
+            className="text-2xl font-bold mb-xs ivypresto-display"
+            style={{ color: "var(--accent-900)" }}
+          >
             <juo-text prop="greetingPrefix">{greetingPrefix}</juo-text> {customerName}
           </h2>
           {showSubtitle && (

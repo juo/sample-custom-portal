@@ -5,6 +5,7 @@ import { ContextProvider } from "@juo/blocks/react";
 import { setNavigateCallback } from "./lib/router";
 import { LoginPage } from "./pages/LoginPage";
 import { OrdersPage } from "./pages/OrdersPage";
+import { HistoryPage } from "./pages/HistoryPage";
 import { SubscriptionPage } from "./pages/SubscriptionPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<SubscriptionPage />} />
             <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/history" element={<HistoryPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

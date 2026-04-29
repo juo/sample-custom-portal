@@ -3,12 +3,12 @@ import { useContext } from "@juo/blocks/react";
 import { RouterServiceContext, LoginServiceContext } from "@juo/blocks";
 import { getRouteNameFromPathname } from "../../lib/router";
 
-type NavItemKey = "subscription" | "orders";
+type NavItemKey = "subscription" | "orders" | "history";
 
 interface NavItemConfig {
   icon: string;
   route: string;
-  labelProp: "subscriptionLabel" | "ordersLabel";
+  labelProp: "subscriptionLabel" | "ordersLabel" | "historyLabel";
 }
 
 const NAV_ITEM_CONFIG: Record<NavItemKey, NavItemConfig> = {
@@ -18,6 +18,7 @@ const NAV_ITEM_CONFIG: Record<NavItemKey, NavItemConfig> = {
     labelProp: "subscriptionLabel",
   },
   orders: { icon: "📦", route: "orders", labelProp: "ordersLabel" },
+  history: { icon: "📋", route: "history", labelProp: "historyLabel" },
 };
 
 interface Props {
@@ -25,6 +26,7 @@ interface Props {
   navItems: NavItemKey[];
   subscriptionLabel: string;
   ordersLabel: string;
+  historyLabel: string;
   logoutIcon: string;
   logoutLabel: string;
 }
@@ -33,6 +35,7 @@ export function BeautyNavigation({
   brandName,
   navItems,
   subscriptionLabel,
+  historyLabel,
   ordersLabel,
   logoutIcon,
   logoutLabel,
@@ -42,6 +45,7 @@ export function BeautyNavigation({
   const navLabels: Record<NavItemConfig["labelProp"], string> = {
     subscriptionLabel,
     ordersLabel,
+    historyLabel,
   };
   const [activeRoute, setActiveRoute] = useState(() =>
     getRouteNameFromPathname(window.location.pathname),

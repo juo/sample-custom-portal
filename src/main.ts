@@ -51,6 +51,7 @@ const routes = {
   "/login": { name: "Login", pageComponent: "BeautyLoginPage" },
   "/": { name: "Subscription", pageComponent: "BeautySubscriptionPage" },
   "/orders": { name: "Orders", pageComponent: "BeautyOrdersPage" },
+  "/history": { name: "Orders", pageComponent: "BeautyOrdersPage" },
 } as const;
 
 type BlockExtensionsModule = {

@@ -25,7 +25,7 @@ const schema = {
           type: "array",
           title: "Navigation items",
           items: {
-            enum: ["subscription", "orders"] as const,
+            enum: ["subscription", "orders", "history"] as const,
           },
         },
         subscriptionLabel: {
@@ -37,6 +37,11 @@ const schema = {
           type: "string",
           "x-juo-control-type": "inline-text",
           default: "Orders",
+        },
+        historyLabel: {
+          type: "string",
+          "x-juo-control-type": "inline-text",
+          default: "History",
         },
         logoutIcon: {
           type: "string",
@@ -52,6 +57,7 @@ const schema = {
       required: [
         "brandName",
         "navItems",
+        "historyLabel",
         "subscriptionLabel",
         "ordersLabel",
         "logoutIcon",
@@ -72,9 +78,10 @@ export const BeautyNavigation = defineBlock<Schema>("BeautyNavigation", {
   initialValue: () => ({
     props: {
       brandName: "Beauty Box",
-      navItems: ["subscription", "orders"],
+      navItems: ["subscription", "orders", "history"],
       subscriptionLabel: "Subscription",
       ordersLabel: "Orders",
+      historyLabel: "Historia zamówień",
       logoutIcon: "👋",
       logoutLabel: "Log out",
     },
