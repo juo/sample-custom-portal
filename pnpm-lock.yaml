@@ -9,8 +9,11 @@ importers:
   .:
     dependencies:
       '@juo/blocks':
-        specifier: 1.1.0-alpha.5
-        version: 1.1.0-alpha.5
+        specifier: 1.1.0-alpha.6
+        version: 1.1.0-alpha.6
+      '@tanstack/react-query':
+        specifier: ^5.100.6
+        version: 5.100.6(react@19.2.5)
       react:
         specifier: ^19.1.0
         version: 19.2.5
@@ -302,8 +305,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@juo/blocks@1.1.0-alpha.5':
-    resolution: {integrity: sha512-CrGTdnwaZhHUsS8JNS/pfPNNFmRyNMPE7bqUitIW4249iq9Hn1qQxDK9/GQvLqaSKHBb0JAu5ZixjZ6DdIOBRw==}
+  '@juo/blocks@1.1.0-alpha.6':
+    resolution: {integrity: sha512-NDbFCOV3xLC9vTb7WWjqHtZ6Wu1hce3tiqlp8v1y9AMzd4iNK5wJoOK0SjjPRxgC7tlK04Mu69/heN1cW73Tsw==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -447,6 +450,14 @@ packages:
     resolution: {integrity: sha512-Nd/SgG27WoA9e+/TdK74KnHz852TLa94ovOYySo/yMPuTmpckK/jIF2jSwS3g7ELSKXK13/cVdmg1Z/DaCWKxA==}
     cpu: [x64]
     os: [win32]
+
+  '@tanstack/query-core@5.100.6':
+    resolution: {integrity: sha512-Os2CPUr98to98RYm+D4qGqGkiffn7MGSyl2547a4MljVkHE30AMJRqTiyCqBfMwzAx/I91vCkAxp5tHSla6Twg==}
+
+  '@tanstack/react-query@5.100.6':
+    resolution: {integrity: sha512-uVSrps0PV16Cxmcn2rvL+dUhwTpTUtiRW347AEeYxMZXO2pZe9ja7E24PAMGoQ5u2g89DD8u4QhOviBk+RN8RA==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -1152,7 +1163,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@juo/blocks@1.1.0-alpha.5':
+  '@juo/blocks@1.1.0-alpha.6':
     dependencies:
       '@preact/signals-core': 1.11.0
 
@@ -1246,6 +1257,13 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.60.2':
     optional: true
+
+  '@tanstack/query-core@5.100.6': {}
+
+  '@tanstack/react-query@5.100.6(react@19.2.5)':
+    dependencies:
+      '@tanstack/query-core': 5.100.6
+      react: 19.2.5
 
   '@types/babel__core@7.20.5':
     dependencies:

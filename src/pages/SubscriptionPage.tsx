@@ -1,3 +1,5 @@
+import { GiftProductsWidget } from "../components/GiftProductsWidget";
+
 export function SubscriptionPage() {
   return (
     <juo-page name="BeautySubscriptionPage">
@@ -18,6 +20,9 @@ export function SubscriptionPage() {
         >
           <juo-extension-root name="welcome" />
           <juo-extension-root name="upcoming" />
+          {/* Gifts widget */}
+          <GiftProductsWidget />
+
           <juo-extension-root name="upsell" />
           <juo-extension-root name="promo" />
         </div>

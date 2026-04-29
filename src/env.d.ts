@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_MOCK_MODE?: string;
   readonly VITE_BLOCKS_EXTENSIONS_VERSION?: string;
   readonly VITE_BLOCKS_EXTENSIONS_URL?: string;
+  readonly VITE_STOREFRONT_TOKEN: string;
 }
 
 declare module "react" {

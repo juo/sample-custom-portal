@@ -6,6 +6,9 @@ import { setNavigateCallback } from "./lib/router";
 import { LoginPage } from "./pages/LoginPage";
 import { OrdersPage } from "./pages/OrdersPage";
 import { SubscriptionPage } from "./pages/SubscriptionPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function NavigateBridge() {
   const navigate = useNavigate();
@@ -20,17 +23,19 @@ function NavigateBridge() {
 
 function App() {
   return (
-    <ContextProvider>
-      <BrowserRouter>
-        <NavigateBridge />
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<SubscriptionPage />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </ContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <ContextProvider>
+        <BrowserRouter>
+          <NavigateBridge />
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<SubscriptionPage />} />
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </ContextProvider>
+    </QueryClientProvider>
   );
 }
 
