@@ -1,8 +1,43 @@
 {
+  "App": {
+    "routes": {
+      "login": "Login",
+      "subscription": "Subscriptions",
+      "orders": "Orders",
+      "history": "History",
+      "aktualnosci": "News",
+      "adresy": "Your addresses"
+    },
+    "pages": {
+      "orders": {
+        "title": "Orders",
+        "backToSubscriptionAriaLabel": "Go back to subscriptions page",
+        "showDetailsButton": "Show details"
+      },
+      "history": {
+        "title": "History",
+        "backToSubscriptionAriaLabel": "Go back to subscriptions page"
+      },
+      "aktualnosci": {
+        "title": "News"
+      },
+      "adresy": {
+        "title": "Your addresses"
+      }
+    },
+    "errors": {
+      "genericTitle": "Error",
+      "missingMountElements": "Failed to initialize the sample portal because required mount elements are missing.",
+      "webComponentsLoadFailed": "Failed to load required Juo web components. Check your network and dependency setup."
+    }
+  },
   "BeautyNavigation": {
     "brandName": "Beauty Box",
-    "subscriptionLabel": "Subscription",
+    "subscriptionLabel": "Subscriptions",
     "ordersLabel": "Orders",
+    "historyLabel": "History",
+    "aktualnosciLabel": "News",
+    "adresyLabel": "Your addresses",
     "logoutIcon": "👋",
     "logoutLabel": "Log out"
   },
@@ -15,7 +50,13 @@
     "deliveryDateLabel": "Delivery date",
     "skipLabel": "Skip this delivery",
     "skippedMessage": "Delivery skipped",
-    "emptyMessage": "No upcoming deliveries scheduled."
+    "emptyMessage": "No upcoming deliveries scheduled.",
+    "fallbackProductTitle": "Product",
+    "quantityLabel": "Qty",
+    "statusDeliveredLabel": "Delivered",
+    "statusSkippedLabel": "Skipped",
+    "statusScheduledLabel": "Scheduled",
+    "statusProcessingLabel": "Processing"
   },
   "BeautyUpsell": {
     "title": "You might also love",
@@ -37,6 +78,10 @@
     "title": "Order History",
     "emptyMessage": "No past orders yet.",
     "itemLabelSingular": "item",
-    "itemLabelPlural": "items"
+    "itemLabelPlural": "items",
+    "statusDeliveredLabel": "Delivered",
+    "statusSkippedLabel": "Skipped",
+    "statusScheduledLabel": "Scheduled",
+    "statusProcessingLabel": "Processing"
   }
 }

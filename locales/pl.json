@@ -1,0 +1,87 @@
+{
+  "App": {
+    "routes": {
+      "login": "Logowanie",
+      "subscription": "Subskrypcje",
+      "orders": "Zamówienia",
+      "history": "Historia",
+      "aktualnosci": "Aktualności",
+      "adresy": "Twoje adresy"
+    },
+    "pages": {
+      "orders": {
+        "title": "Zamówienia",
+        "backToSubscriptionAriaLabel": "Wróć do strony subskrypcji",
+        "showDetailsButton": "Pokaż szczegóły"
+      },
+      "history": {
+        "title": "Historia",
+        "backToSubscriptionAriaLabel": "Wróć do strony subskrypcji"
+      },
+      "aktualnosci": {
+        "title": "Aktualności"
+      },
+      "adresy": {
+        "title": "Twoje adresy"
+      }
+    },
+    "errors": {
+      "genericTitle": "Błąd",
+      "missingMountElements": "Nie udało się uruchomić portalu, ponieważ brakuje wymaganych elementów montowania.",
+      "webComponentsLoadFailed": "Nie udało się załadować wymaganych komponentów Juo. Sprawdź sieć i konfigurację zależności."
+    }
+  },
+  "BeautyNavigation": {
+    "brandName": "Beauty Box",
+    "subscriptionLabel": "Subskrypcje",
+    "ordersLabel": "Zamówienia",
+    "historyLabel": "Historia",
+    "aktualnosciLabel": "Aktualności",
+    "adresyLabel": "Twoje adresy",
+    "logoutIcon": "👋",
+    "logoutLabel": "Wyloguj"
+  },
+  "BeautyWelcome": {
+    "greetingPrefix": "Witamy ponownie,",
+    "subtitle": "Zarządzaj swoją subskrypcją beauty"
+  },
+  "BeautyUpcomingOrder": {
+    "title": "Twoja następna dostawa",
+    "deliveryDateLabel": "Data dostawy",
+    "skipLabel": "Pomiń tę dostawę",
+    "skippedMessage": "Dostawa pominięta",
+    "emptyMessage": "Brak zaplanowanych nadchodzących dostaw.",
+    "fallbackProductTitle": "Produkt",
+    "quantityLabel": "Ilość",
+    "statusDeliveredLabel": "Dostarczone",
+    "statusSkippedLabel": "Pominięte",
+    "statusScheduledLabel": "Zaplanowane",
+    "statusProcessingLabel": "W realizacji"
+  },
+  "BeautyUpsell": {
+    "title": "To też może Ci się spodobać",
+    "addLabel": "Dodaj do boxa",
+    "addedLabel": "Dodano",
+    "emptyMessage": "Brak dostępnych rekomendacji.",
+    "fallbackImageAlt": "Produkt beauty"
+  },
+  "BeautyPromo": {
+    "title": "Oferta specjalna",
+    "description": "Użyj swojego ekskluzywnego kodu rabatowego",
+    "discountCode": "BEAUTY20",
+    "ctaText": "Użyj kodu",
+    "appliedText": "Zastosowano!",
+    "icon": "✨",
+    "imageAlt": "Promocja"
+  },
+  "BeautyOrderHistory": {
+    "title": "Historia zamówień",
+    "emptyMessage": "Nie masz jeszcze wcześniejszych zamówień.",
+    "itemLabelSingular": "produkt",
+    "itemLabelPlural": "produkty",
+    "statusDeliveredLabel": "Dostarczone",
+    "statusSkippedLabel": "Pominięte",
+    "statusScheduledLabel": "Zaplanowane",
+    "statusProcessingLabel": "W realizacji"
+  }
+}

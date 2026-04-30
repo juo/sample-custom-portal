@@ -22,22 +22,3 @@
     outline-offset: 2px;
   }
 }
-
-@media (min-width: 1024px) {
-  .beauty-page-layout {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    min-height: 100vh;
-  }
-  .beauty-sidebar-col {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    border-right: 1px solid var(--accent-200);
-    background: var(--white);
-    overflow-y: auto;
-  }
-  .beauty-content-col {
-    padding-top: 32px !important;
-  }
-}

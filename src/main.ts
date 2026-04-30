@@ -42,18 +42,19 @@ import {
   createBeautyRouterService,
   getPathFromRouteName,
 } from "./lib/router";
+import { getAppCopy, setActiveLocale } from "./app-locale";
 import { applyGlobalStyles } from "./lib/apply-global-styles";
 import { mountApp } from "./App";
 
 // ─── Routes ───────────────────────────────────────────────────────────────
 
-const routes = {
-  "/login": { name: "Login", pageComponent: "BeautyLoginPage" },
-  "/": { name: "Subscription", pageComponent: "BeautySubscriptionPage" },
-  "/orders": { name: "Orders", pageComponent: "BeautyOrdersPage" },
-  "/history": { name: "Orders", pageComponent: "BeautyOrdersPage" },
-  "/aktualnosci": { name: "Aktualności", pageComponent: "BeautyAktualnosciPage" },
-  "/adresy": { name: "Twoje adresy", pageComponent: "BeautyAdresyPage" },
+const routeRegistry = {
+  "/login": "BeautyLoginPage",
+  "/": "BeautySubscriptionPage",
+  "/orders": "BeautyOrdersPage",
+  "/history": "BeautyOrdersPage",
+  "/aktualnosci": "BeautyAktualnosciPage",
+  "/adresy": "BeautyAdresyPage",
 } as const;
 
 type BlockExtensionsModule = {
@@ -90,7 +91,7 @@ async function registerBlocks() {
 }
 
 function getPreferredLocale(): string {
-  return window.navigator.language?.trim() || "en";
+  return "pl";
 }
 
 function resolveMockMode(value: string | undefined): boolean {
@@ -109,9 +110,9 @@ function renderStartupError(message: string): void {
   target.replaceChildren(panel);
 }
 
-function resolvePathnameForTheme(route: string): keyof typeof routes {
+function resolvePathnameForTheme(route: string): keyof typeof routeRegistry {
   const path = getPathFromRouteName(route);
-  return path in routes ? (path as keyof typeof routes) : "/";
+  return path in routeRegistry ? (path as keyof typeof routeRegistry) : "/";
 }
 
 // ─── Editor mode setup ───────────────────────────────────────────────────
@@ -129,6 +130,7 @@ async function setupEditorMode(root: HTMLElement, routerService: RouterService, 
       upsertState: (surface, path, blocks) => editor.upsertThemeState(surface, path, blocks),
     });
     provideContext(root, ThemeStateContext, themeState);
+    setActiveLocale(locale);
     void themeState.locales.setLocale(locale);
     const translationService = createTranslationService(themeState.locales);
     provideContext(root, TranslationContext, translationService);
@@ -151,6 +153,7 @@ function setupViewMode(root: HTMLElement, routerService: RouterService, locale: 
     resolve: async () => null,
     routerService,
   });
+  setActiveLocale(locale);
   void themeState.locales.setLocale(locale);
   const translationService = createTranslationService(themeState.locales);
   provideContext(root, TranslationContext, translationService);
@@ -186,13 +189,15 @@ function setupPageRendering(root: HTMLElement, appEl: HTMLElement) {
 // ─── Main initialization ──────────────────────────────────────────────────
 
 async function initializeTheme() {
+  const preferredLocale = getPreferredLocale();
+  setActiveLocale(preferredLocale);
+  const appCopy = getAppCopy(preferredLocale);
+
   const root = document.querySelector("juo-context-root");
   const appEl = document.querySelector("#app");
   if (!(root instanceof HTMLElement) || !(appEl instanceof HTMLElement)) {
     console.error("Required mount elements were not found.");
-    renderStartupError(
-      "Failed to initialize the sample portal because required mount elements are missing.",
-    );
+    renderStartupError(appCopy.errors.missingMountElements);
     return;
   }
 
@@ -204,15 +209,12 @@ async function initializeTheme() {
     await import(/* @vite-ignore */ webComponentsSpecifier);
   } catch (error) {
     console.error("Failed to load @juo/blocks/web-components", error);
-    renderStartupError(
-      "Failed to load required Juo web components. Check your network and dependency setup.",
-    );
+    renderStartupError(appCopy.errors.webComponentsLoadFailed);
     return;
   }
 
   // 1. Register all blocks
   const registerBlocksPromise = registerBlocks();
-  const preferredLocale = getPreferredLocale();
 
   const shopDomain = import.meta.env.VITE_SHOP_DOMAIN ?? "beauty-box.myshopify.com";
   const useMock = resolveMockMode(import.meta.env.VITE_MOCK_MODE);
@@ -241,7 +243,7 @@ async function initializeTheme() {
       },
     },
     formatError: (error: unknown) => ({
-      title: "Error",
+      title: appCopy.errors.genericTitle,
       message: error instanceof Error ? error.message : String(error),
     }),
     onLoginSuccess: async () => {

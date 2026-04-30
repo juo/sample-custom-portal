@@ -1,11 +1,14 @@
 import { getDrawerState, openDrawer } from "../lib/drawer";
 import { navigate } from "../lib/router";
+import { useAppCopy } from "../app-locale";
 
 export function OrdersPage() {
+  const { pages } = useAppCopy();
+
   return (
     <juo-page name="BeautyOrdersPage">
-      <div className="beauty-page-layout">
-        <div className="beauty-sidebar-col">
+      <div className="lg:grid lg:min-h-screen lg:grid-cols-[240px_1fr]">
+        <div className="lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:border-r lg:border-[var(--accent-200)] lg:bg-[var(--white)]">
           <juo-extension-root name="nav" />
         </div>
         <button
@@ -14,57 +17,20 @@ export function OrdersPage() {
             console.log("after open:", getDrawerState());
           }}
         >
-          Pokaż szczegóły
+          {pages.orders.showDetailsButton}
         </button>
         <div
-          className="beauty-content-col"
-          style={{
-            maxWidth: "860px",
-            margin: "0 auto",
-            padding: "32px 20px 96px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
+          className="mx-auto flex max-w-[860px] flex-col gap-4 px-5 pt-8 pb-24 max-[480px]:pb-[calc(106px+env(safe-area-inset-bottom,0px))] lg:pt-8"
         >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              paddingBottom: "8px",
-            }}
-          >
+          <div className="flex items-center gap-3 pb-2">
             <button
               onClick={() => navigate("subscription")}
-              aria-label="Go back to subscription page"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                background: "var(--accent-100)",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "18px",
-                color: "var(--primary)",
-                flexShrink: 0,
-              }}
+              aria-label={pages.orders.backToSubscriptionAriaLabel}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-0 bg-[var(--accent-100)] text-[18px] text-[var(--primary)]"
             >
               ←
             </button>
-            <h1
-              style={{
-                margin: "0",
-                fontSize: "var(--text-lg)",
-                fontWeight: "700",
-                color: "var(--accent-900)",
-              }}
-            >
-              Orders
-            </h1>
+            <h1 className="m-0 text-lg font-bold text-[var(--accent-900)]">{pages.orders.title}</h1>
           </div>
           <juo-extension-root name="history" style={{ width: "100%" }} />
         </div>

@@ -31,7 +31,7 @@ const schema = {
         subscriptionLabel: {
           type: "string",
           "x-juo-control-type": "inline-text",
-          default: "Subscription",
+          default: "Subskrypcje",
         },
         ordersLabel: {
           type: "string",
@@ -91,9 +91,9 @@ export const BeautyNavigation = defineBlock<Schema>("BeautyNavigation", {
     props: {
       brandName: "Beauty Box",
       navItems: ["subscription", "orders", "history", "aktualnosci", "adresy"],
-      subscriptionLabel: "Subscription",
+      subscriptionLabel: "Subskrypcje",
       ordersLabel: "Orders",
-      historyLabel: "Historia zamówień",
+      historyLabel: "Historia",
       aktualnosciLabel: "Aktualności",
       adresyLabel: "Twoje adresy",
       logoutIcon: "👋",

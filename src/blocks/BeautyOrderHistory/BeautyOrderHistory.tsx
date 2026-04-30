@@ -11,19 +11,16 @@ interface Props {
   showItemCount: boolean;
   itemLabelSingular: string;
   itemLabelPlural: string;
+  statusDeliveredLabel: string;
+  statusSkippedLabel: string;
+  statusScheduledLabel: string;
+  statusProcessingLabel: string;
   visibleStatuses: StatusKey[];
 }
 
-const STATUS_LABEL: Record<StatusKey, string> = {
-  delivered: "Delivered",
-  skipped: "Skipped",
-  scheduled: "Scheduled",
-  processing: "Processing",
-};
-
 function formatDate(dateStr: string | null, locale: string): string {
   if (!dateStr) return "—";
-  return new Date(dateStr).toLocaleDateString(locale || "en", {
+  return new Date(dateStr).toLocaleDateString(locale || "pl", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -50,6 +47,10 @@ export function BeautyOrderHistory({
   showItemCount,
   itemLabelSingular,
   itemLabelPlural,
+  statusDeliveredLabel,
+  statusSkippedLabel,
+  statusScheduledLabel,
+  statusProcessingLabel,
   visibleStatuses,
 }: Props) {
   const orderService = useContext(OrderServiceContext);
@@ -57,6 +58,12 @@ export function BeautyOrderHistory({
   const [locale] = translationService.locale;
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const statusLabels: Record<StatusKey, string> = {
+    delivered: statusDeliveredLabel,
+    skipped: statusSkippedLabel,
+    scheduled: statusScheduledLabel,
+    processing: statusProcessingLabel,
+  };
 
   useEffect(() => {
     void orderService.getHistory().then((result) => {
@@ -102,7 +109,7 @@ export function BeautyOrderHistory({
           {filtered.map((order) => {
             const count = order.items.length;
             const itemWord = count === 1 ? itemLabelSingular : itemLabelPlural;
-            const label = STATUS_LABEL[order.status as StatusKey] ?? order.status;
+            const label = statusLabels[order.status as StatusKey] ?? order.status;
             return (
               <div
                 key={order.id}

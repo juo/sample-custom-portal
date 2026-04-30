@@ -1,5 +1,6 @@
 import { signal, effect } from "@juo/blocks";
 import type { RouterService, RouterNavigationEvent } from "@juo/blocks";
+import { getAppCopy } from "../app-locale";
 
 export function isEditorMode(): boolean {
   return window.location.search.includes("editor=true");
@@ -76,13 +77,14 @@ export function createBeautyRouterService(): RouterService {
       return () => subscribers.delete(callback);
     },
     getPages() {
+      const { routes } = getAppCopy();
       return [
-        { title: "Login", path: "/login", block: "BeautyLoginPage" },
-        { title: "Subscription", path: "/", block: "BeautySubscriptionPage" },
-        { title: "Orders", path: "/orders", block: "BeautyOrdersPage" },
-        { title: "Historia zamówień", path: "/history", block: "BeautyOrdersPage" },
-        { title: "Aktualności", path: "/aktualnosci", block: "BeautyAktualnosciPage" },
-        { title: "Twoje adresy", path: "/adresy", block: "BeautyAdresyPage" },
+        { title: routes.login, path: "/login", block: "BeautyLoginPage" },
+        { title: routes.subscription, path: "/", block: "BeautySubscriptionPage" },
+        { title: routes.orders, path: "/orders", block: "BeautyOrdersPage" },
+        { title: routes.history, path: "/history", block: "BeautyOrdersPage" },
+        { title: routes.aktualnosci, path: "/aktualnosci", block: "BeautyAktualnosciPage" },
+        { title: routes.adresy, path: "/adresy", block: "BeautyAdresyPage" },
       ];
     },
   };

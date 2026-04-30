@@ -11,13 +11,19 @@ interface Props {
   skipLabel: string;
   skippedMessage: string;
   emptyMessage: string;
+  fallbackProductTitle: string;
+  quantityLabel: string;
+  statusDeliveredLabel: string;
+  statusSkippedLabel: string;
+  statusScheduledLabel: string;
+  statusProcessingLabel: string;
   fetchLimit: number;
   dateFormat: DateFormat;
 }
 
 function formatDate(dateStr: string, format: DateFormat, locale: string): string {
   const date = new Date(dateStr);
-  const resolvedLocale = locale || "en";
+  const resolvedLocale = locale || "pl";
   switch (format) {
     case "short":
       return date.toLocaleDateString(resolvedLocale, {
@@ -59,6 +65,12 @@ export function BeautyUpcomingOrder({
   skipLabel,
   skippedMessage,
   emptyMessage,
+  fallbackProductTitle,
+  quantityLabel,
+  statusDeliveredLabel,
+  statusSkippedLabel,
+  statusScheduledLabel,
+  statusProcessingLabel,
   fetchLimit,
   dateFormat,
 }: Props) {
@@ -67,6 +79,12 @@ export function BeautyUpcomingOrder({
   const [locale] = translationService.locale;
   const [upcoming, setUpcoming] = schedulesService.upcoming;
   const upcomingOrder: ScheduleOrder | null = upcoming[0] ?? null;
+  const statusLabels: Record<string, string> = {
+    delivered: statusDeliveredLabel,
+    skipped: statusSkippedLabel,
+    scheduled: statusScheduledLabel,
+    processing: statusProcessingLabel,
+  };
 
   const [loading, setLoading] = useState(true);
   const [skipping, setSkipping] = useState(false);
@@ -131,7 +149,7 @@ export function BeautyUpcomingOrder({
               className="text-xs font-semibold px-sm py-xs rounded-full"
               style={statusStyle(upcomingOrder.status)}
             >
-              {upcomingOrder.status}
+              {statusLabels[upcomingOrder.status] ?? upcomingOrder.status}
             </span>
           </div>
 
@@ -145,7 +163,7 @@ export function BeautyUpcomingOrder({
                 {item.imageUrl ? (
                   <img
                     src={item.imageUrl}
-                    alt={item.title ?? "Product"}
+                    alt={item.title ?? fallbackProductTitle}
                     className="w-10 h-10 rounded-card-3 object-cover flex-shrink-0"
                   />
                 ) : (
@@ -161,10 +179,10 @@ export function BeautyUpcomingOrder({
                     className="text-sm font-medium truncate"
                     style={{ color: "var(--accent-900)" }}
                   >
-                    {item.title ?? "Product"}
+                    {item.title ?? fallbackProductTitle}
                   </p>
                   <p className="text-xs" style={{ color: "var(--accent-400)" }}>
-                    Qty: {item.quantity}
+                    {quantityLabel}: {item.quantity}
                   </p>
                 </div>
               </div>
