@@ -1,3 +1,4 @@
+import { getDrawerState, openDrawer } from "../lib/drawer";
 import { navigate } from "../lib/router";
 
 export function OrdersPage() {
@@ -7,6 +8,14 @@ export function OrdersPage() {
         <div className="beauty-sidebar-col">
           <juo-extension-root name="nav" />
         </div>
+        <button
+          onClick={() => {
+            openDrawer("orderDetails", { orderId: "order_123" });
+            console.log("after open:", getDrawerState());
+          }}
+        >
+          Pokaż szczegóły
+        </button>
         <div
           className="beauty-content-col"
           style={{

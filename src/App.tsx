@@ -10,6 +10,7 @@ import { AktualnosciPage } from "./pages/AktualnosciPage";
 import { AdresyPage } from "./pages/AdresyPage";
 import { SubscriptionPage } from "./pages/SubscriptionPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { DrawerHost } from "./components/DrawerHost";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ function App() {
             <Route path="/adresy" element={<AdresyPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          <DrawerHost />
         </BrowserRouter>
       </ContextProvider>
     </QueryClientProvider>
