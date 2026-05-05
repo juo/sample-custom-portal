@@ -1,6 +1,6 @@
 import { useAppCopy } from "../app-locale";
 
-export function AktualnosciPage() {
+export function NewsPage() {
   const { pages } = useAppCopy();
 
   return (

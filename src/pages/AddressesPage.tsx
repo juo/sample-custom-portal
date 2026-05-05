@@ -1,6 +1,6 @@
 import { useAppCopy } from "../app-locale";
 
-export function AdresyPage() {
+export function AddressesPage() {
   const { pages } = useAppCopy();
 
   return (

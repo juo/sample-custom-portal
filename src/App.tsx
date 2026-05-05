@@ -6,8 +6,8 @@ import { setNavigateCallback } from "./lib/router";
 import { LoginPage } from "./pages/LoginPage";
 import { OrdersPage } from "./pages/OrdersPage";
 import { HistoryPage } from "./pages/HistoryPage";
-import { AktualnosciPage } from "./pages/AktualnosciPage";
-import { AdresyPage } from "./pages/AdresyPage";
+import { NewsPage } from "./pages/NewsPage";
+import { AddressesPage } from "./pages/AddressesPage";
 import { SubscriptionPage } from "./pages/SubscriptionPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DrawerHost } from "./components/DrawerHost";
@@ -36,8 +36,8 @@ function App() {
             <Route path="/" element={<SubscriptionPage />} />
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/history" element={<HistoryPage />} />
-            <Route path="/aktualnosci" element={<AktualnosciPage />} />
-            <Route path="/adresy" element={<AdresyPage />} />
+            <Route path="/aktualnosci" element={<NewsPage />} />
+            <Route path="/adresy" element={<AddressesPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           <DrawerHost />
