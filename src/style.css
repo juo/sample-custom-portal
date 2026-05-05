@@ -9,6 +9,20 @@
     --muted: oklch(62% 0.01 70);
   }
 
+  html,
+  body,
+  #app,
+  juo-context-root {
+    font-family: quasimoda, sans-serif;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
   :where(
     a,
     button,
