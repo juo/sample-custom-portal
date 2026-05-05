@@ -31,6 +31,7 @@ import {
   createMockSchedulesAdapter,
   createApiSchedulesAdapter,
   type ApiFetcher,
+  type ScheduleOrder,
 } from "@juo/blocks";
 import "./style.css";
 
@@ -62,6 +63,20 @@ type BlockExtensionsModule = {
 };
 
 const DEFAULT_EXTENSIONS_VERSION = "1.2.0";
+
+type RawScheduleOrder = Omit<ScheduleOrder, "deliveryDate"> & {
+  deliveryDate?: string;
+  date?: string;
+};
+
+function normalizeScheduleOrder(order: RawScheduleOrder): ScheduleOrder {
+  const { date: _date, ...rest } = order;
+
+  return {
+    ...rest,
+    deliveryDate: order.deliveryDate ?? order.date ?? "",
+  };
+}
 
 // ─── Block registration ───────────────────────────────────────────────────
 
@@ -290,7 +305,24 @@ async function initializeTheme() {
     : createApiSubscriptionAdapter(fetcher);
   const schedulesAdapter = useMock
     ? createMockSchedulesAdapter()
-    : createApiSchedulesAdapter(fetcher);
+    : (() => {
+        const adapter = createApiSchedulesAdapter(fetcher);
+
+        return {
+          ...adapter,
+          async getUpcomingOrders(count: number) {
+            const result = await adapter.getUpcomingOrders(count);
+            if (result._tag === "Failure") return result;
+
+            return {
+              ...result,
+              data: result.data.map((order) =>
+                normalizeScheduleOrder(order as RawScheduleOrder),
+              ),
+            };
+          },
+        };
+      })();
 
   // 5. Create services
   const customerService = createCustomerService(customerAdapter);

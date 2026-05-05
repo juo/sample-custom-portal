@@ -21,8 +21,12 @@ interface Props {
   dateFormat: DateFormat;
 }
 
-function formatDate(dateStr: string, format: DateFormat, locale: string): string {
+function formatDate(dateStr: string | null | undefined, format: DateFormat, locale: string): string {
+  if (!dateStr) return "—";
+
   const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) return "—";
+
   const resolvedLocale = locale || "pl";
   switch (format) {
     case "short":
@@ -99,6 +103,7 @@ export function BeautyUpcomingOrder({
     setSkipping(true);
     const result = await schedulesService.skipOrder({
       subscriptionId: upcomingOrder.subscriptionId,
+      date: upcomingOrder.deliveryDate,
     });
     if (result._tag === "Success") {
       setSkipped(true);
