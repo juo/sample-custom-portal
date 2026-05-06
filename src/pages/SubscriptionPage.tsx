@@ -1,4 +1,4 @@
-import { GiftProductsWidget } from "../components/GiftProductsWidget";
+import { GiftProductsWidget } from "../widgets/GiftProductsWidget";
 import { PromotionBanner } from "../widgets/PromotionBanner";
 
 export function SubscriptionPage() {

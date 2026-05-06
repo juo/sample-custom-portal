@@ -1,6 +1,7 @@
 import { useContext } from "@juo/blocks/react";
 import { CustomerServiceContext } from "@juo/blocks";
 import { useEffect, useState, type ReactNode } from "react";
+import { Countdown, useNow } from "../components/Countdown";
 import {
   getField,
   getFieldReference,
@@ -175,65 +176,9 @@ function useCustomerPresence() {
     return () => {
       cancelled = true;
     };
-  }, [customerService]);
-
-  return hasCustomer;
-}
-
-function useNow() {
-  const [now, setNow] = useState(() => new Date());
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      setNow(new Date());
-    }, 1000);
-
-    return () => {
-      window.clearInterval(interval);
-    };
   }, []);
 
-  return now;
-}
-
-function Countdown({ endDate }: { endDate: Date }) {
-  const now = useNow();
-  const remainingMs = Math.max(0, endDate.getTime() - now.getTime());
-  const totalSeconds = Math.floor(remainingMs / 1000);
-
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
-
-  if (remainingMs <= 0) return null;
-
-  return (
-    <div className="relative z-10 flex h-fit grow-0 gap-[6px] rounded-sm pl-[6px] text-s font-semibold leading-[16px] tracking-[0.26px] text-white">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M7.99967 4.00065V8.00065L10.6663 9.33398M14.6663 8.00065C14.6663 11.6825 11.6816 14.6673 7.99967 14.6673C4.31778 14.6673 1.33301 11.6825 1.33301 8.00065C1.33301 4.31875 4.31778 1.33398 7.99967 1.33398C11.6816 1.33398 14.6663 4.31875 14.6663 8.00065Z"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-
-      <div className="flex w-max gap-[3px] !p-0 text-[12px] font-semibold leading-[17px] tracking-[-0.12px]">
-        {days > 0 && <div>{days}d</div>}
-        <div>{String(hours).padStart(2, "0")}h</div>
-        <div>{String(minutes).padStart(2, "0")}m</div>
-        <div className="min-w-[28px]">{String(seconds).padStart(2, "0")}s</div>
-      </div>
-    </div>
-  );
+  return hasCustomer;
 }
 
 function CopyIcon() {
@@ -333,7 +278,12 @@ export function PromotionBanner() {
               <div className="relative z-10 leading-tight text-13 font-semibold tracking-[0.26px] text-white">
                 {title}
               </div>
-              {hasCounter && counterEndDate && <Countdown endDate={counterEndDate} />}
+              {hasCounter && counterEndDate && (
+                <Countdown
+                  endDate={counterEndDate}
+                  className="relative z-10 flex h-fit grow-0 items-center gap-[6px] rounded-sm pl-[6px] text-[12px] font-semibold leading-[17px] tracking-[-0.12px] text-white"
+                />
+              )}
             </div>
 
             <div className="flex flex-col gap-3 rounded-b-lg bg-white px-4 pb-[14px] pt-[3px]">
