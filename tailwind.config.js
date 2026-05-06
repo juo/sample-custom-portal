@@ -36,6 +36,7 @@ export default {
         gray80: "#909090",
         gray100: "#747474",
         gray400: "#ADADAD",
+        pink: "#FECCFF",
         pink10: "#FFF0F8",
         pink20: "#FFEAF5",
         pink30: "#FFDFEF",

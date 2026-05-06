@@ -3,13 +3,12 @@ import { SubscriptionServiceContext, SchedulesServiceContext } from "@juo/blocks
 import type { ScheduleOrderItem } from "@juo/blocks";
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import { Countdown } from "../components/Countdown";
+import { Button } from "../components/Button";
 import {
   useGiftProductsWidget,
   type GiftWidgetEntry,
   type ThresholdEntry,
-  type GiftProduct,
   type GiftItem,
-  type GiftProductVariant,
 } from "../hooks/useGiftProductsWidget";
 
 // --- Rich text (same pattern as PromotionBanner) ---
@@ -84,23 +83,6 @@ function renderRichText(value: string | null, className?: string): ReactNode {
 }
 
 // --- Helpers ---
-
-const MULTIPACK_PATTERNS = [
-  "2 szt.",
-  "3 szt.",
-  "4 szt.",
-  "6 szt.",
-  "9 szt.",
-  "12 szt.",
-  "6 op.",
-  "9 op.",
-  "12 op.",
-];
-
-function getValidVariants(gift: GiftProduct): GiftProductVariant[] {
-  if (gift.variants.length <= 1) return gift.variants;
-  return gift.variants.filter((v) => !MULTIPACK_PATTERNS.some((p) => v.title.includes(p)));
-}
 
 function cleanGiftTitle(title: string): string {
   return title
@@ -210,7 +192,7 @@ function GiftCard({
   const isAnyAdded = isAnyGiftFromThresholdAdded(threshold, orderItems);
   const isAddedOther = !isAdded && isAnyAdded;
   const imageUrl = gift.variants[0]?.imageUrl ?? gift.mediaUrl ?? null;
-  const validVariants = getValidVariants(gift);
+  const validVariants = gift.variants;
 
   async function handleAdd() {
     if (!subscriptionId || isLocked || isAdded || isAddedOther || adding) return;
@@ -273,14 +255,14 @@ function GiftCard({
               <img
                 src={imageUrl}
                 alt={gift.title}
-                width={60}
-                height={60}
-                className="h-[60px] w-[60px] rounded object-cover"
+                width={93}
+                height={93}
+                className="h-[93px] w-[93px] rounded object-cover"
               />
             ) : (
               <div className="h-[60px] w-[60px] rounded bg-gray-100" />
             )}
-            <span className="gifts-badge absolute left-0 top-0 rounded-sm bg-pink100 px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white">
+            <span className="gifts-badge rounded-full absolute left-1.5 top-1.5 bg-pink100 px-1.5 py-0.5 text-10 font-medium uppercase text-white tracking-[0.2px] leading-[12px]">
               PREZENT
             </span>
           </a>
@@ -288,7 +270,7 @@ function GiftCard({
 
         {/* Right side */}
         <div className="gift-product-right flex min-w-0 flex-1 flex-col gap-1.5">
-          <div className="flex items-start justify-between gap-1.5">
+          <div className="flex items-start justify-between gap-4">
             <a
               href={productHref}
               target="_blank"
@@ -298,10 +280,12 @@ function GiftCard({
               {cleanGiftTitle(gift.title)}
             </a>
             <div className="gift-product-prices flex-shrink-0 text-right">
-              <p className="gift-compare-price text-[11px] leading-tight">
-                <span className="font-semibold text-black">0,01 zł</span>{" "}
+              <p className="gift-compare-price text-[11px] leading-tight flex flex-col">
+                <span className="text-[12px] font-semibold leading-[17.4px] tracking-[0.24px] text-pink100">
+                  0,01 zł
+                </span>
                 {gift.compareAtPrice > 0 && (
-                  <span className="text-text-secondary line-through">
+                  <span className="text-[12px] leading-[17.4px] tracking-[0.24px] text-gray60 line-through">
                     {gift.compareAtPrice.toFixed(2)} zł
                   </span>
                 )}
@@ -327,27 +311,19 @@ function GiftCard({
           )}
 
           {/* Actions */}
-          <div className="gift-product-actions flex items-center gap-2">
-            <button
-              type="button"
+          <div className="gift-product-actions flex items-center gap-2 mt-auto">
+            <Button
               disabled={buttonDisabled}
               onClick={() => void handleAdd()}
-              className={`gift-button primary rounded-full px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition-opacity ${
-                isAdded
-                  ? "cursor-default bg-gray-100 text-gray-500"
-                  : isAddedOther
-                    ? "cursor-not-allowed bg-gray-100 text-gray-500"
-                    : isLocked
-                      ? "cursor-not-allowed bg-gray-100 text-gray-400"
-                      : "cursor-pointer bg-black text-white hover:opacity-80"
-              } ${adding ? "opacity-50" : ""}`}
+              variant={isAdded || isAddedOther || isLocked ? "muted" : "primary"}
+              className={`gift-button min-w-[156px] ${isAdded ? "cursor-default" : ""} ${adding ? "opacity-50" : ""}`}
             >
               {adding ? (
                 <span className="inline-block h-3 w-3 animate-spin rounded-full border border-current border-t-transparent" />
               ) : (
                 buttonLabel
               )}
-            </button>
+            </Button>
 
             {isLocked && lockReasons.length > 0 && (
               <button
@@ -407,17 +383,16 @@ function ThresholdSection({
   return (
     <div className={`gift-threshold gift-threshold-${index} flex flex-col gap-2`}>
       <p className="gift-threshold-value text-[13px] font-semibold text-black">
-        <span>od {threshold.threshold} zł</span>
+        <span className="rounded-full px-1.5 py-0.5 text-10 font-medium bg-pink tracking-[0.2px] leading-[12px]">
+          od {threshold.threshold} zł
+        </span>
       </p>
 
       {threshold.gifts.length > 1 ? (
         <div className="flex gap-2 overflow-x-auto pb-1">
           {threshold.gifts.map((item) => {
             const selectedVariantId =
-              selectedVariants[item.gift.id] ??
-              getValidVariants(item.gift)[0]?.id ??
-              item.gift.variants[0]?.id ??
-              "";
+              selectedVariants[item.gift.id] ?? item.gift.variants[0]?.id ?? "";
             return (
               <div key={item.gift.id} className="w-[calc(100%-12px)] flex-shrink-0">
                 <GiftCard
@@ -443,7 +418,6 @@ function ThresholdSection({
             subscriptionId={subscriptionId}
             selectedVariantId={
               selectedVariants[threshold.gifts[0].gift.id] ??
-              getValidVariants(threshold.gifts[0].gift)[0]?.id ??
               threshold.gifts[0].gift.variants[0]?.id ??
               ""
             }
@@ -491,13 +465,17 @@ export function GiftProductsWidget() {
   }
 
   return (
-    <div className="widget-gift-component overflow-hidden rounded-lg bg-gray-50">
+    <div
+      className="widget-gift-component overflow-hidden rounded-lg bg-gray-50 max-w-[410px]"
+      style={{ boxShadow: "0 0 12px 0 rgba(255, 174, 207, 0.40)" }}
+    >
       {/* Countdown header */}
       {countdownEndDate && (
         <div
-          className="widget-gift-date flex items-center justify-between bg-pink100 px-4 pb-4 pt-2.5"
+          className="widget-gift-date relative flex items-center justify-between bg-pink100 px-4 pb-4 pt-2.5"
           style={{ borderRadius: "8px 8px 0 0" }}
         >
+          <div className="absolute bottom-[-1px]  left-0 right-0 h-[9px] w-full rounded-t-[8px] bg-gray-50" />
           <div className="widget-gift-countdown-heading text-[13px] font-medium text-white">
             Ta promocja znika za:
           </div>
@@ -506,11 +484,13 @@ export function GiftProductsWidget() {
       )}
 
       {/* Header */}
-      <div className="widget-gift-header px-4 pb-3 pt-4">
-        <h2 className="text-[15px] font-semibold text-black">{entry.title}</h2>
+      <div className="widget-gift-header px-4 pb-3 pt-2">
+        <h2 className="mb-2 pb-0 font-ivyPresto text-[24px] font-light not-italic leading-[120%] tracking-[0.72px] text-black [font-feature-settings:'liga'_off]">
+          {entry.title}
+        </h2>
         {renderRichText(
           entry.description,
-          "description mt-1 text-[13px] text-text-secondary [&_p]:m-0 [&_a]:underline",
+          "description mt-1 text-[13px] [&_p]:m-0 [&_a]:underline text-black",
         )}
       </div>
 
@@ -531,10 +511,10 @@ export function GiftProductsWidget() {
         ))}
 
         {entry.bottomMessage && (
-          <div className="widget-gift-footer">
+          <div className="widget-gift-footer rounded-[4px] border border-[#8692CE] bg-[#f2f5fb] p-4 text-[12px] font-normal leading-[17.4px] tracking-[0.24px] text-[#4C5187]">
             {renderRichText(
               entry.bottomMessage,
-              "text-[11px] text-text-secondary [&_p]:m-0 [&_a]:underline",
+              "[&_*]:text-[12px] [&_*]:leading-[1.45] [&_*]:text-[#4C5187] [&_*]:font-quasimoda [&_*]:font-normal [&_*]:tracking-[.01em] [&_*]:text-left [&_p]:m-0 [&_a]:underline [&_strong]:font-bold [&_b]:font-bold",
             )}
           </div>
         )}

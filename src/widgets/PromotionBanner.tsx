@@ -290,7 +290,7 @@ export function PromotionBanner() {
               {renderRichText(contentValue, PROMO_BANNER_CONTENT_CLASS)}
 
               {promotionCode && (
-                <div className="mt-0.5 flex items-baseline gap-1.5">
+                <div className="flex items-baseline gap-1.5">
                   <span className={PROMO_BANNER_CONTENT_CLASS}>
                     <span>Kod</span>
                   </span>

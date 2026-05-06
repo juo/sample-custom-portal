@@ -64,17 +64,35 @@ type BlockExtensionsModule = {
 
 const DEFAULT_EXTENSIONS_VERSION = "1.2.0";
 
-type RawScheduleOrder = Omit<ScheduleOrder, "deliveryDate"> & {
+type RawScheduleOrderItem = {
+  id: string;
+  productId?: string;
+  product?: string;
+  variantId?: string;
+  variant?: string;
+  quantity: number;
+  title?: string;
+  imageUrl?: string;
+  [key: string]: unknown;
+};
+
+type RawScheduleOrder = Omit<ScheduleOrder, "deliveryDate" | "items"> & {
   deliveryDate?: string;
   date?: string;
+  items?: RawScheduleOrderItem[];
 };
 
 function normalizeScheduleOrder(order: RawScheduleOrder): ScheduleOrder {
-  const { date: _date, ...rest } = order;
+  const { date: _date, items, ...rest } = order;
 
   return {
     ...rest,
     deliveryDate: order.deliveryDate ?? order.date ?? "",
+    items: (items ?? []).map((item) => ({
+      ...item,
+      productId: item.productId ?? item.product ?? "",
+      variantId: item.variantId ?? item.variant ?? "",
+    })),
   };
 }
 
