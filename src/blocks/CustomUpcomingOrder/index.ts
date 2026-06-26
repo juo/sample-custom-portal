@@ -2,14 +2,14 @@ import { defineBlock } from "@juo/blocks";
 import { createReactRenderer } from "@juo/blocks/react";
 import type { FromExtendedSchema, ExtendedJSONSchema } from "json-schema-to-ts";
 import { blockLocales } from "../../locales";
-import { BeautyUpcomingOrder as BeautyUpcomingOrderComponent } from "./BeautyUpcomingOrder";
+import { CustomUpcomingOrder as CustomUpcomingOrderComponent } from "./CustomUpcomingOrder";
 
 type Extensions = {
   "x-juo-control-type": "inline-text" | "stepper";
   "x-juo-group": string;
 };
 
-type BeautySchema = ExtendedJSONSchema<Extensions>;
+type CustomSchema = ExtendedJSONSchema<Extensions>;
 
 const schema = {
   type: "object",
@@ -73,11 +73,11 @@ const schema = {
   },
   required: ["props"],
   additionalProperties: false,
-} as const satisfies BeautySchema;
+} as const satisfies CustomSchema;
 
 type Schema = FromExtendedSchema<Extensions, typeof schema>;
 
-export const BeautyUpcomingOrder = defineBlock<Schema>("BeautyUpcomingOrder", {
+export const CustomUpcomingOrder = defineBlock<Schema>("CustomUpcomingOrder", {
   group: "theme",
   schema,
   initialValue: () => ({
@@ -91,6 +91,6 @@ export const BeautyUpcomingOrder = defineBlock<Schema>("BeautyUpcomingOrder", {
       dateFormat: "long",
     },
   }),
-  renderer: createReactRenderer(BeautyUpcomingOrderComponent),
-  locales: blockLocales("BeautyUpcomingOrder"),
+  renderer: createReactRenderer(CustomUpcomingOrderComponent),
+  locales: blockLocales("CustomUpcomingOrder"),
 });

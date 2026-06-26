@@ -1,4 +1,4 @@
-# Juo Sample Custom Portal (Beauty Theme)
+# Juo Sample Custom Portal (Custom Theme)
 
 Sample reference repository showing how to build a custom portal with custom Juo blocks.
 
@@ -66,8 +66,8 @@ Notes:
 | -------------------------------- | ------------- | --------------------------------------------- | ------------------------------------------------------------------------------------- |
 | `VITE_MOCK_MODE`                 | No            | `true`                                        | Use mock adapters (`true`) or real API adapters (`false`).                            |
 | `VITE_API_URL`                   | Real API mode | `https://api.juo.io`                          | Backend root URL used by login + API integrations.                                    |
-| `VITE_SHOP_DOMAIN`               | Real API mode | `beauty-box.myshopify.com`                    | Shopify domain used for auth + request headers. Also used to derive editor store URL. |
-| `VITE_BLOCKS_EXTENSIONS_VERSION` | No            | `1.2.0`                                       | Extension package version used in default CDN URL.                                    |
+| `VITE_SHOP_DOMAIN`               | Real API mode | `custom-box.myshopify.com`                    | Shopify domain used for auth + request headers. Also used to derive editor store URL. |
+| `VITE_BLOCKS_EXTENSIONS_VERSION` | No            | `1.12.0-alpha.3`                              | Extension package version used in default CDN URL.                                    |
 | `VITE_BLOCKS_EXTENSIONS_URL`     | No            | Derived from `VITE_BLOCKS_EXTENSIONS_VERSION` | Optional full override for remote extension blocks URL.                               |
 
 ## Mock Mode vs Real API Mode
@@ -92,7 +92,19 @@ The frontend sends API requests to `/api/*` (proxied to backend in Vite dev serv
 
 ## Editor Mode
 
-The editor is an external service hosted at:
+There are two ways to open the editor against your local portal:
+
+**Embedded local editor (aligned with `juo create` scaffolding).** The dev server
+serves an embedded editor at `/editor` (loaded from the Juo CDN) that points at
+your running portal:
+
+- `http://localhost:5180/editor`
+
+The devtools overlay is injected into the local preview automatically. Both are
+dev-only — `apply: "serve"` keeps the editor and devtools embeds out of the
+production `vite build`.
+
+**External editor.** The editor is also hosted as an external service at:
 
 - `https://admin.juo.io/store/${store}/editor`
 
@@ -106,7 +118,7 @@ Example:
 
 The plugin logs the external editor URL with your local portal attached via
 `portal-url`, deriving the store slug from `VITE_SHOP_DOMAIN`
-(for example, `beauty-box.myshopify.com` -> `beauty-box`).
+(for example, `custom-box.myshopify.com` -> `custom-box`).
 
 ## Route Contract
 
@@ -115,4 +127,3 @@ The sample uses three routes:
 - `/login`
 - `/`
 - `/orders`
-

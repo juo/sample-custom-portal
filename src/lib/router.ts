@@ -1,5 +1,9 @@
 import { signal, effect } from "@juo/blocks";
-import type { RouterService, RouterNavigationEvent } from "@juo/blocks";
+import type { RouterService } from "@juo/blocks";
+
+// `RouterNavigationEvent` is no longer part of the public @juo/blocks barrel;
+// the subscribe callback receives a plain `{ path }` payload.
+type RouterNavigationEvent = { path: string };
 
 export function isEditorMode(): boolean {
   return window.location.search.includes("editor=true");
@@ -46,7 +50,7 @@ export function navigate(path: string): void {
   }
 }
 
-export function createBeautyRouterService(): RouterService {
+export function createCustomRouterService(): RouterService {
   const subscribers = new Set<(event: RouterNavigationEvent) => void>();
 
   effect(() => {
@@ -71,9 +75,14 @@ export function createBeautyRouterService(): RouterService {
     },
     getPages() {
       return [
-        { title: "Login", path: "/login", block: "BeautyLoginPage" },
-        { title: "Subscription", path: "/", block: "BeautySubscriptionPage" },
-        { title: "Orders", path: "/orders", block: "BeautyOrdersPage" },
+        { title: "Login", path: "/login", block: "CustomLoginPage", routeNames: ["login"] },
+        {
+          title: "Subscription",
+          path: "/",
+          block: "CustomSubscriptionPage",
+          routeNames: ["subscription"],
+        },
+        { title: "Orders", path: "/orders", block: "CustomOrdersPage", routeNames: ["orders"] },
       ];
     },
   };

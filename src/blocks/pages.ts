@@ -26,7 +26,7 @@ const loginPageSchema = {
   additionalProperties: false,
 } as const;
 
-export const BeautyLoginPage = defineBlock("BeautyLoginPage", {
+export const CustomLoginPage = defineBlock("CustomLoginPage", {
   group: "page",
   schema: loginPageSchema,
   initialValue: () => ({
@@ -64,17 +64,17 @@ const subscriptionPageSchema = {
   additionalProperties: false,
 } as const;
 
-export const BeautySubscriptionPage = defineBlock("BeautySubscriptionPage", {
+export const CustomSubscriptionPage = defineBlock("CustomSubscriptionPage", {
   group: "page",
   schema: subscriptionPageSchema,
   initialValue: () => ({
     props: {},
     slots: {
-      nav: [createBlockInstance("BeautyNavigation")],
-      welcome: [createBlockInstance("BeautyWelcome")],
-      upcoming: [createBlockInstance("BeautyUpcomingOrder")],
-      upsell: [createBlockInstance("BeautyUpsell")],
-      promo: [createBlockInstance("BeautyPromo")],
+      nav: [createBlockInstance("CustomNavigation")],
+      welcome: [createBlockInstance("CustomWelcome")],
+      upcoming: [createBlockInstance("CustomUpcomingOrder")],
+      upsell: [createBlockInstance("CustomUpsell")],
+      promo: [createBlockInstance("CustomPromo")],
     },
   }),
   renderer: createReactRenderer(SubscriptionPage),
@@ -103,14 +103,14 @@ const ordersPageSchema = {
   additionalProperties: false,
 } as const;
 
-export const BeautyOrdersPage = defineBlock("BeautyOrdersPage", {
+export const CustomOrdersPage = defineBlock("CustomOrdersPage", {
   group: "page",
   schema: ordersPageSchema,
   initialValue: () => ({
     props: {},
     slots: {
-      nav: [createBlockInstance("BeautyNavigation")],
-      history: [createBlockInstance("BeautyOrderHistory")],
+      nav: [createBlockInstance("CustomNavigation")],
+      history: [createBlockInstance("CustomOrderHistory")],
     },
   }),
   renderer: createReactRenderer(OrdersPage),

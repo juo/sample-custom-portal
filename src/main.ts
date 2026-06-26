@@ -6,58 +6,52 @@ import {
   createThemeState,
   ThemeStateContext,
   injectContext,
-  createCustomerService,
   CustomerServiceContext,
-  createOrderService,
-  OrderServiceContext,
-  createSubscriptionService,
+  OrdersServiceContext,
+  ProductServiceContext,
   SubscriptionServiceContext,
-  createSchedulesService,
   SchedulesServiceContext,
   RouterServiceContext,
+  createOverlayService,
+  OverlayServiceContext,
   createTranslationService,
   TranslationContext,
   LoginServiceContext,
   type RouterService,
-  createLoginService,
-  createApiLoginAdapter,
-  createMockLoginAdapter,
-  createMockCustomerAdapter,
-  createApiCustomerAdapter,
-  createMockOrderAdapter,
-  createApiOrderAdapter,
-  createMockSubscriptionAdapter,
-  createApiSubscriptionAdapter,
-  createMockSchedulesAdapter,
-  createApiSchedulesAdapter,
-  type ApiFetcher,
 } from "@juo/blocks";
+import { defineCustomElements as defineCustomerUiElements } from "@juo/customer-ui/web-components";
 import "./style.css";
 
-import * as beautyBlocks from "./blocks/index";
+// Register the @juo/customer-ui design-system web components (juo-button,
+// juo-card, juo-tag, …) so blocks can render design-system elements.
+defineCustomerUiElements();
+
+import * as customBlocks from "./blocks/index";
 import {
   isEditorMode,
   currentRoute,
   navigate,
-  createBeautyRouterService,
+  createCustomRouterService,
   getPathFromRouteName,
 } from "./lib/router";
+import { createPortalLoginService } from "./lib/login";
+import { createPortalServices } from "./lib/services";
 import { applyGlobalStyles } from "./lib/apply-global-styles";
 import { mountApp } from "./App";
 
 // ─── Routes ───────────────────────────────────────────────────────────────
 
 const routes = {
-  "/login": { name: "Login", pageComponent: "BeautyLoginPage" },
-  "/": { name: "Subscription", pageComponent: "BeautySubscriptionPage" },
-  "/orders": { name: "Orders", pageComponent: "BeautyOrdersPage" },
+  "/login": { name: "Login", pageComponent: "CustomLoginPage" },
+  "/": { name: "Subscription", pageComponent: "CustomSubscriptionPage" },
+  "/orders": { name: "Orders", pageComponent: "CustomOrdersPage" },
 } as const;
 
 type BlockExtensionsModule = {
   registerBlocks?: () => void;
 };
 
-const DEFAULT_EXTENSIONS_VERSION = "1.2.0";
+const DEFAULT_EXTENSIONS_VERSION = "1.12.0-alpha.3";
 
 // ─── Block registration ───────────────────────────────────────────────────
 
@@ -81,7 +75,7 @@ async function registerBlocks() {
     console.error(`Failed to load extensions from ${extensionsUrl}`, error);
   }
 
-  Object.values(beautyBlocks).forEach((block) =>
+  Object.values(customBlocks).forEach((block) =>
     registerBlock(block as Parameters<typeof registerBlock>[0]),
   );
 }
@@ -129,10 +123,14 @@ async function setupEditorMode(root: HTMLElement, routerService: RouterService, 
     void themeState.locales.setLocale(locale);
     const translationService = createTranslationService(themeState.locales);
     provideContext(root, TranslationContext, translationService);
+    const overlayService = createOverlayService(themeState);
+    provideContext(root, OverlayServiceContext, overlayService);
 
-    await editorModule.setupEditorMode({ routerService, themeState }).catch((error: unknown) => {
-      console.error("Failed to setup editor mode", error);
-    });
+    await editorModule
+      .setupEditorMode({ routerService, themeState, overlayService })
+      .catch((error: unknown) => {
+        console.error("Failed to setup editor mode", error);
+      });
 
     const initialPathname = resolvePathnameForTheme(currentRoute.value);
     void themeState.resolve("page", initialPathname);
@@ -152,6 +150,7 @@ function setupViewMode(root: HTMLElement, routerService: RouterService, locale: 
   const translationService = createTranslationService(themeState.locales);
   provideContext(root, TranslationContext, translationService);
   provideContext(root, ThemeStateContext, themeState);
+  provideContext(root, OverlayServiceContext, createOverlayService(themeState));
 
   // Resolve the initial page; subsequent navigations are driven by routerService.subscribe
   const initialPathname = resolvePathnameForTheme(currentRoute.value);
@@ -211,39 +210,14 @@ async function initializeTheme() {
   const registerBlocksPromise = registerBlocks();
   const preferredLocale = getPreferredLocale();
 
-  const shopDomain = import.meta.env.VITE_SHOP_DOMAIN ?? "beauty-box.myshopify.com";
+  const shopDomain = import.meta.env.VITE_SHOP_DOMAIN ?? "custom-box.myshopify.com";
   const useMock = resolveMockMode(import.meta.env.VITE_MOCK_MODE);
 
-  // 2. Create login service
-  const loginAdapter = useMock
-    ? createMockLoginAdapter()
-    : createApiLoginAdapter((path, init) => fetch("/api" + path, init), {
-        shopDomain,
-        appUrl: window.location.origin,
-      });
-  const loginServiceInstance = createLoginService({
-    adapter: loginAdapter,
-    shop: {
-      domain: shopDomain,
-      locale: preferredLocale,
-    },
-    router: {
-      push({ path }: { path: string }) {
-        const routeName = path.replace(/^\//, "") || "subscription";
-        navigate(routeName);
-      },
-      replace(path: string) {
-        const routeName = path.replace(/^\//, "") || "subscription";
-        navigate(routeName);
-      },
-    },
-    formatError: (error: unknown) => ({
-      title: "Error",
-      message: error instanceof Error ? error.message : String(error),
-    }),
-    onLoginSuccess: async () => {
-      navigate("subscription");
-    },
+  // 2. Create login service (mock or real adapter chosen by VITE_MOCK_MODE)
+  const loginServiceInstance = createPortalLoginService({
+    useMock,
+    shopDomain,
+    locale: preferredLocale,
   });
 
   // In mock mode, auto-authenticate with a fake delegated token.
@@ -264,56 +238,34 @@ async function initializeTheme() {
     await loginServiceInstance.handleQueryParams(new URLSearchParams(window.location.search));
   }
 
-  // 3. Create fetcher (used in non-mock mode; adds auth headers and shop domain)
-  const fetcher: ApiFetcher = async (path, init) => {
-    const authHeaders = await loginServiceInstance.getAuthHeaders();
-    return fetch("/api" + path, {
-      ...init,
-      headers: {
-        "X-Shopify-Shop-Domain": shopDomain,
-        ...authHeaders,
-        ...(init?.headers ?? {}),
-      },
+  // 3. Create domain services (mock or real adapters chosen by VITE_MOCK_MODE)
+  const { customerService, productService, ordersService, subscriptionService, schedulesService } =
+    createPortalServices({
+      useMock,
+      shopDomain,
+      loginService: loginServiceInstance,
     });
-  };
+  const routerService = createCustomRouterService();
 
-  // 4. Select adapters based on VITE_MOCK_MODE
-  const customerAdapter = useMock ? createMockCustomerAdapter() : createApiCustomerAdapter(fetcher);
-  const orderAdapter = useMock ? createMockOrderAdapter() : createApiOrderAdapter(fetcher);
-  const subscriptionAdapter = useMock
-    ? createMockSubscriptionAdapter()
-    : createApiSubscriptionAdapter(fetcher);
-  const schedulesAdapter = useMock
-    ? createMockSchedulesAdapter()
-    : createApiSchedulesAdapter(fetcher);
-
-  // 5. Create services
-  const customerService = createCustomerService(customerAdapter);
-  const orderService = createOrderService(orderAdapter);
-  const subscriptionService = createSubscriptionService(subscriptionAdapter);
-  const schedulesService = createSchedulesService(schedulesAdapter, {
-    hasPendingBilling: subscriptionService.hasPendingBilling,
-  });
-  const routerService = createBeautyRouterService();
-
-  // 6. Provide contexts
+  // 4. Provide contexts
   provideContext(root, LoginServiceContext, loginServiceInstance);
   provideContext(root, CustomerServiceContext, customerService);
-  provideContext(root, OrderServiceContext, orderService);
+  provideContext(root, ProductServiceContext, productService);
+  provideContext(root, OrdersServiceContext, ordersService);
   provideContext(root, SubscriptionServiceContext, subscriptionService);
   provideContext(root, SchedulesServiceContext, schedulesService);
   provideContext(root, RouterServiceContext, routerService);
 
   await registerBlocksPromise;
 
-  // 7. Setup editor or view mode (sets ThemeStateContext)
+  // 5. Setup editor or view mode (sets ThemeStateContext)
   if (isEditorMode()) {
     await setupEditorMode(root, routerService, preferredLocale);
   } else {
     setupViewMode(root, routerService, preferredLocale);
   }
 
-  // 8. Bridge globalStyles → CSS custom properties on :root
+  // 6. Bridge globalStyles → CSS custom properties on :root
   const currentThemeState = injectContext(root, ThemeStateContext);
   if (currentThemeState) {
     effect(() => {
@@ -321,7 +273,7 @@ async function initializeTheme() {
     });
   }
 
-  // 9. Auth guard — redirect to login when unauthenticated
+  // 7. Auth guard — redirect to login when unauthenticated
   if (!isEditorMode()) {
     effect(() => {
       const isAuth = loginServiceInstance.isAuthenticated.value;
@@ -336,7 +288,7 @@ async function initializeTheme() {
     });
   }
 
-  // 10. Load initial data after auth
+  // 8. Load initial data after auth
   if (!isEditorMode()) {
     let dataLoaded = false;
     effect(() => {
@@ -351,7 +303,7 @@ async function initializeTheme() {
     });
   }
 
-  // 11. Mount React app (view mode) or render page blocks (editor mode)
+  // 9. Mount React app (view mode) or render page blocks (editor mode)
   if (isEditorMode()) {
     setupPageRendering(root, appEl);
   } else {

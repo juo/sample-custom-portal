@@ -131,7 +131,7 @@ export function blocksThemePlugin(): Plugin {
         server.config.logger.info(`\n  Blocks Editor (external): \x1b[36m${editorUrl}\x1b[0m\n`);
         if (!derivedStore) {
           server.config.logger.info(
-            `  Tip: set VITE_SHOP_DOMAIN (e.g. beauty-box.myshopify.com) to print a ready-to-open store URL.\n`,
+            `  Tip: set VITE_SHOP_DOMAIN (e.g. custom-box.myshopify.com) to print a ready-to-open store URL.\n`,
           );
         }
       });

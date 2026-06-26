@@ -13,7 +13,7 @@ interface NavItemConfig {
 
 const NAV_ITEM_CONFIG: Record<NavItemKey, NavItemConfig> = {
   subscription: {
-    icon: "💄",
+    icon: "🔁",
     route: "subscription",
     labelProp: "subscriptionLabel",
   },
@@ -29,7 +29,7 @@ interface Props {
   logoutLabel: string;
 }
 
-export function BeautyNavigation({
+export function CustomNavigation({
   brandName,
   navItems,
   subscriptionLabel,

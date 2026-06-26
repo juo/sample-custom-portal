@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" fill="none" role="img" aria-labelledby="title desc">
-  <title id="title">Beauty Product Placeholder</title>
-  <desc id="desc">A soft beige and rose gradient with a stylized beauty bottle and sparkles.</desc>
+  <title id="title">Custom Product Placeholder</title>
+  <desc id="desc">A soft beige and rose gradient with a stylized custom bottle and sparkles.</desc>
   <defs>
     <linearGradient id="bg" x1="40" y1="20" x2="600" y2="460" gradientUnits="userSpaceOnUse">
       <stop stop-color="#F7E8E0"/>

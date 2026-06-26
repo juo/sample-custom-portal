@@ -5,8 +5,10 @@
 
 @layer base {
   :root {
-    --primary: oklch(73% 0.03 70);
-    --muted: oklch(62% 0.01 70);
+    /* Brand aliases mapped onto the design-system palette so block markup that
+       references --primary / --muted picks up the themed accent/tint scales. */
+    --primary: var(--accent-700);
+    --muted: var(--tint-500);
   }
 
   :where(
@@ -24,12 +26,12 @@
 }
 
 @media (min-width: 1024px) {
-  .beauty-page-layout {
+  .custom-page-layout {
     display: grid;
     grid-template-columns: 240px 1fr;
     min-height: 100vh;
   }
-  .beauty-sidebar-col {
+  .custom-sidebar-col {
     position: sticky;
     top: 0;
     height: 100vh;
@@ -37,7 +39,7 @@
     background: var(--white);
     overflow-y: auto;
   }
-  .beauty-content-col {
+  .custom-content-col {
     padding-top: 32px !important;
   }
 }

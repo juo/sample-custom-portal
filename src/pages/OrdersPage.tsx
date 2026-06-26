@@ -2,13 +2,13 @@ import { navigate } from "../lib/router";
 
 export function OrdersPage() {
   return (
-    <juo-page name="BeautyOrdersPage">
-      <div className="beauty-page-layout">
-        <div className="beauty-sidebar-col">
+    <juo-page name="CustomOrdersPage">
+      <div className="custom-page-layout">
+        <div className="custom-sidebar-col">
           <juo-extension-root name="nav" />
         </div>
         <div
-          className="beauty-content-col"
+          className="custom-content-col"
           style={{
             maxWidth: "860px",
             margin: "0 auto",

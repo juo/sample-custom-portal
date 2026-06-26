@@ -1,6 +1,15 @@
 import type { GlobalStyles } from "@juo/blocks";
 
-// ─── Color conversion: hex → oklch ──────────────────────────────────────
+// Bridges the theme's `globalStyles` onto the @juo/customer-ui design system.
+//
+// The design system is driven by `data-*` attributes + lightness/hue/chroma
+// custom properties that `@juo/customer-ui/theme-modes.css` reads to compute the
+// `--theme-*` token inputs. So instead of hand-computing palettes, we translate
+// globalStyles into those attributes/inputs and let the design system do the
+// rest — which is what makes volume, corners, style, tint and custom colours all
+// take effect (and stay consistent with the editor and the web components).
+
+// ─── hex → OKLCH ─────────────────────────────────────────────────────────
 
 function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace("#", "");
@@ -43,183 +52,87 @@ function hexToOklch(hex: string): { L: number; C: number; h: number } {
   return { L, C, h: Number.isNaN(h) ? 0 : h };
 }
 
-// ─── Palette generation ─────────────────────────────────────────────────
+// ─── Custom-colour inputs ───────────────────────────────────────────────
 
-const PALETTE_STEPS: Array<{ step: number; L: number; chromaScale: number }> = [
-  { step: 25, L: 0.985, chromaScale: 0.12 },
-  { step: 50, L: 0.97, chromaScale: 0.2 },
-  { step: 100, L: 0.95, chromaScale: 0.33 },
-  { step: 200, L: 0.9, chromaScale: 0.5 },
-  { step: 300, L: 0.82, chromaScale: 0.67 },
-  { step: 400, L: 0.7, chromaScale: 0.83 },
-  { step: 500, L: 0.62, chromaScale: 1.0 },
-  { step: 600, L: 0.55, chromaScale: 1.08 },
-  { step: 700, L: 0.45, chromaScale: 1.0 },
-  { step: 800, L: 0.32, chromaScale: 0.83 },
-  { step: 900, L: 0.18, chromaScale: 0.5 },
-];
-
-function oklchStr(L: number, C: number, h: number): string {
-  return `oklch(${(L * 100).toFixed(1)}% ${C.toFixed(4)} ${h.toFixed(1)})`;
+// theme-modes.css derives a colour's full 25–900 scale from data-<key>="custom"
+// plus --<key>-l / --<key>-hue / --<key>-chroma, where the picked colour becomes
+// grade 700 (its lightness/hue) and chroma is expressed relative to the 0.045
+// base step.
+function setCustomColor(el: HTMLElement, key: string, hex: string): void {
+  const { L, C, h } = hexToOklch(hex);
+  el.setAttribute(`data-${key}`, "custom");
+  el.style.setProperty(`--${key}-l`, `${(L * 100).toFixed(2)}%`);
+  el.style.setProperty(`--${key}-hue`, h.toFixed(2));
+  el.style.setProperty(`--${key}-chroma`, (C / 0.045).toFixed(4));
 }
 
-function generatePalette(hex: string): Record<number, string> {
-  const { C, h } = hexToOklch(hex);
-  const peakChroma = Math.min(C, 0.17);
-
-  const result: Record<number, string> = {};
-  for (const { step, L, chromaScale } of PALETTE_STEPS) {
-    result[step] = oklchStr(L, peakChroma * chromaScale, h);
-  }
-  return result;
+function clearCustomColor(el: HTMLElement, key: string): void {
+  el.removeAttribute(`data-${key}`);
+  el.style.removeProperty(`--${key}-l`);
+  el.style.removeProperty(`--${key}-hue`);
+  el.style.removeProperty(`--${key}-chroma`);
 }
 
-// ─── Volume → CSS variables ─────────────────────────────────────────────
-
-function volumeVars(volume: GlobalStyles["volume"]): Record<string, string> {
-  switch (volume) {
-    case "compact":
-      return {
-        "--theme-spacing": "6px",
-        "--theme-padding": "6px",
-        "--theme-font-size": "14px",
-      };
-    case "spacious":
-      return {
-        "--theme-spacing": "12px",
-        "--theme-padding": "12px",
-        "--theme-font-size": "16px",
-      };
-    default:
-      return {
-        "--theme-spacing": "8px",
-        "--theme-padding": "8px",
-        "--theme-font-size": "16px",
-      };
-  }
+// Honour the theme's colour when set, otherwise fall back to the design
+// system's built-in default for that role (success/error/etc.).
+function applyOptionalColor(el: HTMLElement, key: string, hex: string): void {
+  if (hex) setCustomColor(el, key, hex);
+  else clearCustomColor(el, key);
 }
 
-// ─── Corners → CSS variables ────────────────────────────────────────────
-
-const RADIUS_MAP: Record<string, string> = {
-  sharp: "0px",
-  soft: "4px",
-  round: "8px",
-  pill: "100px",
-};
-const BUTTON_RADIUS_MAP: Record<string, string> = {
-  sharp: "0px",
-  round: "4px",
-  circle: "100px",
-};
-const THUMBNAIL_RADIUS_MAP: Record<string, string> = {
-  sharp: "0%",
-  round: "12px",
-  circle: "50%",
-};
-
-function cornerVars(styles: GlobalStyles): Record<string, string> {
-  return {
-    "--theme-radius": RADIUS_MAP[styles.corners] ?? "4px",
-    "--theme-buttons-rounding": BUTTON_RADIUS_MAP[styles.buttonCorners] ?? "4px",
-    "--theme-thumbnail-rounding": THUMBNAIL_RADIUS_MAP[styles.thumbnailCorners] ?? "50%",
-  };
-}
-
-// ─── Style → surface CSS variables ──────────────────────────────────────
-
-function styleVars(style: GlobalStyles["style"]): Record<string, string> {
-  switch (style) {
-    case "bare":
-      return {
-        "--theme-surface-1": "transparent",
-        "--theme-surface-1-border": "transparent",
-        "--theme-surface-2": "transparent",
-        "--theme-surface-2-border": "transparent",
-        "--theme-surface-3": "transparent",
-        "--theme-surface-3-border": "transparent",
-      };
-    case "tinted":
-      return {
-        "--theme-surface-1": "var(--tint-25)",
-        "--theme-surface-1-border": "transparent",
-        "--theme-surface-2": "var(--tint-50)",
-        "--theme-surface-2-border": "transparent",
-        "--theme-surface-3": "var(--tint-100)",
-        "--theme-surface-3-border": "transparent",
-      };
-    case "solid":
-      return {
-        "--theme-surface-1": "var(--white)",
-        "--theme-surface-1-border": "var(--tint-200)",
-        "--theme-surface-2": "var(--white)",
-        "--theme-surface-2-border": "var(--tint-300)",
-        "--theme-surface-3": "var(--tint-50)",
-        "--theme-surface-3-border": "var(--tint-200)",
-      };
-    case "layered":
-      return {
-        "--theme-surface-1": "var(--tint-25)",
-        "--theme-surface-1-border": "var(--tint-200)",
-        "--theme-surface-2": "var(--white)",
-        "--theme-surface-2-border": "var(--tint-300)",
-        "--theme-surface-3": "var(--tint-50)",
-        "--theme-surface-3-border": "var(--tint-200)",
-      };
-    default:
-      return {
-        "--theme-surface-1": "transparent",
-        "--theme-surface-1-border": "transparent",
-        "--theme-surface-2": "var(--white)",
-        "--theme-surface-2-border": "var(--tint-300)",
-        "--theme-surface-3": "transparent",
-        "--theme-surface-3-border": "transparent",
-      };
-  }
-}
-
-// ─── Main ────────────────────────────────────────────────────────────────
-
-const COLOR_TO_PREFIX: Array<[keyof GlobalStyles["colors"], string]> = [
-  ["accent", "accent"],
-  ["secondary", "secondary"],
-  ["tint", "tint"],
-  ["callout", "callout"],
-  ["success", "success"],
-  ["error", "error"],
-  ["information", "info"],
-  ["warning", "warning"],
-];
+// Default brand palette — used when the theme state supplies no colour (e.g.
+// mock/view mode, where the page resolves to the default global styles). The
+// editor/theme overrides any of these per role when it provides a colour.
+const DEFAULT_BRAND_COLORS = {
+  accent: "#a8896b", // warm taupe — the sample's brand colour
+  secondary: "#c4a882", // sand
+  tint: "#94897e", // warm neutral for surfaces
+} as const;
 
 export function applyGlobalStyles(el: HTMLElement, styles: GlobalStyles): void {
-  // Color palettes
-  for (const [colorKey, prefix] of COLOR_TO_PREFIX) {
-    const hex = styles.colors[colorKey];
-    if (!hex) continue;
-    const palette = generatePalette(hex);
-    for (const [step, value] of Object.entries(palette)) {
-      el.style.setProperty(`--theme-${prefix}-${step}`, value);
-    }
-  }
+  // 1. Mode attributes consumed by @juo/customer-ui/theme-modes.css
+  //    (spacing, font size, radii, surfaces).
+  el.setAttribute("data-volume", styles.volume);
+  el.setAttribute("data-style", styles.style);
+  el.setAttribute("data-corners", styles.corners);
+  el.setAttribute("data-button-corners", styles.buttonCorners);
+  el.setAttribute("data-thumbnail-corners", styles.thumbnailCorners);
 
-  // Background → white token
+  // 2. Background → page surface colour.
   if (styles.colors.background) {
-    const { L, C, h } = hexToOklch(styles.colors.background);
-    el.style.setProperty("--theme-white", oklchStr(L, C, h));
+    el.style.setProperty("background-color", styles.colors.background);
+  } else {
+    el.style.removeProperty("background-color");
   }
 
-  // Volume
-  for (const [k, v] of Object.entries(volumeVars(styles.volume))) {
-    el.style.setProperty(k, v);
+  const isCustom = styles.theme === "custom";
+
+  // 3. Tint (surface neutrals).
+  //    - Preset theme: the neutral/warm/cold preset, driven by `themeType`.
+  //    - Custom theme: the picked tint colour.
+  //    `colors.tint` is only honoured in custom mode — otherwise a stale custom
+  //    tint would shadow the preset and the neutral/warm/cold switch would do
+  //    nothing.
+  if (isCustom && styles.colors.tint) {
+    setCustomColor(el, "tint", styles.colors.tint);
+  } else {
+    clearCustomColor(el, "tint");
+    el.setAttribute("data-tint", styles.themeType || "neutral");
   }
 
-  // Corners
-  for (const [k, v] of Object.entries(cornerVars(styles))) {
-    el.style.setProperty(k, v);
-  }
+  // 4. Accent + secondary: the theme's colour when set, else the brand default.
+  //    The design system has no warm/cold preset for these roles (presets only
+  //    drive the tint/surface neutrals), so the sample keeps its brand accent
+  //    unless the theme explicitly overrides it.
+  setCustomColor(el, "accent", styles.colors.accent || DEFAULT_BRAND_COLORS.accent);
+  setCustomColor(el, "secondary", styles.colors.secondary || DEFAULT_BRAND_COLORS.secondary);
 
-  // Style (surfaces)
-  for (const [k, v] of Object.entries(styleVars(styles.style))) {
-    el.style.setProperty(k, v);
-  }
+  // 5. Callout (custom theme only) + semantic roles: honour the theme,
+  //    otherwise keep the design system's built-in defaults.
+  if (isCustom && styles.colors.callout) setCustomColor(el, "callout", styles.colors.callout);
+  else clearCustomColor(el, "callout");
+  applyOptionalColor(el, "success", styles.colors.success);
+  applyOptionalColor(el, "error", styles.colors.error);
+  applyOptionalColor(el, "info", styles.colors.information);
+  applyOptionalColor(el, "warning", styles.colors.warning);
 }

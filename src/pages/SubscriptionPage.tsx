@@ -1,12 +1,12 @@
 export function SubscriptionPage() {
   return (
-    <juo-page name="BeautySubscriptionPage">
-      <div className="beauty-page-layout">
-        <div className="beauty-sidebar-col">
+    <juo-page name="CustomSubscriptionPage">
+      <div className="custom-page-layout">
+        <div className="custom-sidebar-col">
           <juo-extension-root name="nav" />
         </div>
         <div
-          className="beauty-content-col"
+          className="custom-content-col"
           style={{
             maxWidth: "860px",
             margin: "0 auto",

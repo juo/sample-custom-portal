@@ -16,6 +16,21 @@ declare module "react" {
       "juo-extension-root": HTMLAttributes<HTMLElement> & { name?: string };
       "juo-context-root": HTMLAttributes<HTMLElement>;
       "juo-page": HTMLAttributes<HTMLElement> & { name?: string };
+      // @juo/customer-ui design-system web components. Use `class` (not
+      // `className`): React doesn't alias className to the class attribute on
+      // custom elements.
+      "juo-button": HTMLAttributes<HTMLElement> & {
+        variant?: "solid" | "outline" | "ghost" | "link";
+        size?: "sm" | "md" | "lg" | "xl";
+        disabled?: boolean;
+        class?: string;
+      };
+      "juo-card": HTMLAttributes<HTMLElement> & { level?: 1 | 2 | 3; class?: string };
+      "juo-tag": HTMLAttributes<HTMLElement> & {
+        variant?: "info" | "success" | "warning" | "error" | "neutral";
+        size?: "sm" | "md";
+        class?: string;
+      };
     }
   }
 }

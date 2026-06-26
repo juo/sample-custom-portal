@@ -2,13 +2,13 @@ import { defineBlock } from "@juo/blocks";
 import { createReactRenderer } from "@juo/blocks/react";
 import type { FromExtendedSchema, ExtendedJSONSchema } from "json-schema-to-ts";
 import { blockLocales } from "../../locales";
-import { BeautyNavigation as BeautyNavigationComponent } from "./BeautyNavigation";
+import { CustomNavigation as CustomNavigationComponent } from "./CustomNavigation";
 
 type Extensions = {
   "x-juo-control-type": "inline-text";
 };
 
-type BeautySchema = ExtendedJSONSchema<Extensions>;
+type CustomSchema = ExtendedJSONSchema<Extensions>;
 
 const schema = {
   type: "object",
@@ -19,7 +19,7 @@ const schema = {
         brandName: {
           type: "string",
           "x-juo-control-type": "inline-text",
-          default: "Beauty Box",
+          default: "Custom Box",
         },
         navItems: {
           type: "array",
@@ -62,16 +62,16 @@ const schema = {
   },
   required: ["props"],
   additionalProperties: false,
-} as const satisfies BeautySchema;
+} as const satisfies CustomSchema;
 
 type Schema = FromExtendedSchema<Extensions, typeof schema>;
 
-export const BeautyNavigation = defineBlock<Schema>("BeautyNavigation", {
+export const CustomNavigation = defineBlock<Schema>("CustomNavigation", {
   group: "theme",
   schema,
   initialValue: () => ({
     props: {
-      brandName: "Beauty Box",
+      brandName: "Custom Box",
       navItems: ["subscription", "orders"],
       subscriptionLabel: "Subscription",
       ordersLabel: "Orders",
@@ -79,6 +79,6 @@ export const BeautyNavigation = defineBlock<Schema>("BeautyNavigation", {
       logoutLabel: "Log out",
     },
   }),
-  renderer: createReactRenderer(BeautyNavigationComponent),
-  locales: blockLocales("BeautyNavigation"),
+  renderer: createReactRenderer(CustomNavigationComponent),
+  locales: blockLocales("CustomNavigation"),
 });

@@ -8,7 +8,7 @@ interface Props {
   showSubtitle: boolean;
 }
 
-export function BeautyWelcome({ greetingPrefix, subtitle, showSubtitle }: Props) {
+export function CustomWelcome({ greetingPrefix, subtitle, showSubtitle }: Props) {
   const customerService = useContext(CustomerServiceContext);
   const [customerName, setCustomerName] = useState("");
   const [loading, setLoading] = useState(true);

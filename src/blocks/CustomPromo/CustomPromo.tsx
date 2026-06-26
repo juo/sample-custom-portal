@@ -16,7 +16,7 @@ interface Props {
   imageAlt: string;
 }
 
-export function BeautyPromo({
+export function CustomPromo({
   title,
   description,
   discountCode,
@@ -107,21 +107,14 @@ export function BeautyPromo({
           <juo-text prop="appliedText">{appliedText}</juo-text>
         </div>
       ) : (
-        <button
-          onClick={() => void handleApply()}
+        <juo-button
+          variant="outline"
+          class="w-full"
           disabled={applying}
-          className="w-full py-md rounded-card-2 text-sm font-bold transition-opacity"
-          style={{
-            background: "var(--white)",
-            color: "var(--secondary-700)",
-            border: "1px solid var(--secondary-700)",
-            borderRadius: "var(--buttons-rounding)",
-            cursor: "pointer",
-            opacity: applying ? 0.6 : 1,
-          }}
+          onClick={() => void handleApply()}
         >
           <juo-text prop="ctaText">{ctaText}</juo-text>
-        </button>
+        </juo-button>
       )}
     </div>
   );

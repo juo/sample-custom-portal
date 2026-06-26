@@ -2,13 +2,13 @@ import { defineBlock } from "@juo/blocks";
 import { createReactRenderer } from "@juo/blocks/react";
 import type { FromExtendedSchema, ExtendedJSONSchema } from "json-schema-to-ts";
 import { blockLocales } from "../../locales";
-import { BeautyWelcome as BeautyWelcomeComponent } from "./BeautyWelcome";
+import { CustomWelcome as CustomWelcomeComponent } from "./CustomWelcome";
 
 type Extensions = {
   "x-juo-control-type": "inline-text";
 };
 
-type BeautySchema = ExtendedJSONSchema<Extensions>;
+type CustomSchema = ExtendedJSONSchema<Extensions>;
 
 const schema = {
   type: "object",
@@ -24,7 +24,7 @@ const schema = {
         subtitle: {
           type: "string",
           "x-juo-control-type": "inline-text",
-          default: "Manage your beauty subscription",
+          default: "Manage your custom subscription",
         },
         showSubtitle: {
           type: "boolean",
@@ -38,20 +38,20 @@ const schema = {
   },
   required: ["props"],
   additionalProperties: false,
-} as const satisfies BeautySchema;
+} as const satisfies CustomSchema;
 
 type Schema = FromExtendedSchema<Extensions, typeof schema>;
 
-export const BeautyWelcome = defineBlock<Schema>("BeautyWelcome", {
+export const CustomWelcome = defineBlock<Schema>("CustomWelcome", {
   group: "theme",
   schema,
   initialValue: () => ({
     props: {
       greetingPrefix: "Welcome back,",
-      subtitle: "Manage your beauty subscription",
+      subtitle: "Manage your custom subscription",
       showSubtitle: true,
     },
   }),
-  renderer: createReactRenderer(BeautyWelcomeComponent),
-  locales: blockLocales("BeautyWelcome"),
+  renderer: createReactRenderer(CustomWelcomeComponent),
+  locales: blockLocales("CustomWelcome"),
 });

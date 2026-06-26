@@ -2,7 +2,7 @@ import { defineBlock } from "@juo/blocks";
 import { createReactRenderer } from "@juo/blocks/react";
 import type { FromExtendedSchema, ExtendedJSONSchema } from "json-schema-to-ts";
 import { blockLocales } from "../../locales";
-import { BeautyUpsell as BeautyUpsellComponent } from "./BeautyUpsell";
+import { CustomUpsell as CustomUpsellComponent } from "./CustomUpsell";
 
 type Extensions = {
   "x-juo-control-type": "inline-text" | "stepper" | "number";
@@ -10,7 +10,7 @@ type Extensions = {
   "x-juo-visible-when": { prop: string; eq: string };
 };
 
-type BeautySchema = ExtendedJSONSchema<Extensions>;
+type CustomSchema = ExtendedJSONSchema<Extensions>;
 
 const schema = {
   type: "object",
@@ -74,14 +74,14 @@ const schema = {
           type: "string",
           title: "Fallback image URL",
           "x-juo-group": "media",
-          default: "/assets/beauty-upsell-default.svg",
+          default: "/assets/custom-upsell-default.svg",
         },
         fallbackImageAlt: {
           type: "string",
           title: "Fallback image alt text",
           "x-juo-control-type": "inline-text",
           "x-juo-group": "media",
-          default: "Beauty product",
+          default: "Custom product",
         },
       },
       required: [
@@ -101,11 +101,11 @@ const schema = {
   },
   required: ["props"],
   additionalProperties: false,
-} as const satisfies BeautySchema;
+} as const satisfies CustomSchema;
 
 type Schema = FromExtendedSchema<Extensions, typeof schema>;
 
-export const BeautyUpsell = defineBlock<Schema>("BeautyUpsell", {
+export const CustomUpsell = defineBlock<Schema>("CustomUpsell", {
   group: "theme",
   schema,
   initialValue: () => ({
@@ -118,10 +118,10 @@ export const BeautyUpsell = defineBlock<Schema>("BeautyUpsell", {
       columns: 3,
       cardWidth: 144,
       showPrice: true,
-      fallbackImageUrl: "/assets/beauty-upsell-default.svg",
-      fallbackImageAlt: "Beauty product",
+      fallbackImageUrl: "/assets/custom-upsell-default.svg",
+      fallbackImageAlt: "Custom product",
     },
   }),
-  renderer: createReactRenderer(BeautyUpsellComponent),
-  locales: blockLocales("BeautyUpsell"),
+  renderer: createReactRenderer(CustomUpsellComponent),
+  locales: blockLocales("CustomUpsell"),
 });

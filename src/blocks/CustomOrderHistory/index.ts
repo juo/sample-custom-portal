@@ -2,14 +2,14 @@ import { defineBlock } from "@juo/blocks";
 import { createReactRenderer } from "@juo/blocks/react";
 import type { FromExtendedSchema, ExtendedJSONSchema } from "json-schema-to-ts";
 import { blockLocales } from "../../locales";
-import { BeautyOrderHistory as BeautyOrderHistoryComponent } from "./BeautyOrderHistory";
+import { CustomOrderHistory as CustomOrderHistoryComponent } from "./CustomOrderHistory";
 
 type Extensions = {
   "x-juo-control-type": "inline-text";
   "x-juo-group": string;
 };
 
-type BeautySchema = ExtendedJSONSchema<Extensions>;
+type CustomSchema = ExtendedJSONSchema<Extensions>;
 
 const schema = {
   type: "object",
@@ -51,7 +51,7 @@ const schema = {
           type: "array",
           title: "Visible statuses",
           items: {
-            enum: ["delivered", "skipped", "scheduled", "processing"] as const,
+            enum: ["fulfilled", "partially_fulfilled", "unfulfilled", "pending"] as const,
           },
         },
       },
@@ -68,11 +68,11 @@ const schema = {
   },
   required: ["props"],
   additionalProperties: false,
-} as const satisfies BeautySchema;
+} as const satisfies CustomSchema;
 
 type Schema = FromExtendedSchema<Extensions, typeof schema>;
 
-export const BeautyOrderHistory = defineBlock<Schema>("BeautyOrderHistory", {
+export const CustomOrderHistory = defineBlock<Schema>("CustomOrderHistory", {
   group: "theme",
   schema,
   initialValue: () => ({
@@ -82,9 +82,9 @@ export const BeautyOrderHistory = defineBlock<Schema>("BeautyOrderHistory", {
       showItemCount: true,
       itemLabelSingular: "item",
       itemLabelPlural: "items",
-      visibleStatuses: ["delivered", "skipped", "scheduled", "processing"],
+      visibleStatuses: ["fulfilled", "partially_fulfilled", "unfulfilled", "pending"],
     },
   }),
-  renderer: createReactRenderer(BeautyOrderHistoryComponent),
-  locales: blockLocales("BeautyOrderHistory"),
+  renderer: createReactRenderer(CustomOrderHistoryComponent),
+  locales: blockLocales("CustomOrderHistory"),
 });

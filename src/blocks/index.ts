@@ -1,7 +1,7 @@
-export { BeautyNavigation } from "./BeautyNavigation/index";
-export { BeautyWelcome } from "./BeautyWelcome/index";
-export { BeautyUpcomingOrder } from "./BeautyUpcomingOrder/index";
-export { BeautyUpsell } from "./BeautyUpsell/index";
-export { BeautyPromo } from "./BeautyPromo/index";
-export { BeautyOrderHistory } from "./BeautyOrderHistory/index";
+export { CustomNavigation } from "./CustomNavigation/index";
+export { CustomWelcome } from "./CustomWelcome/index";
+export { CustomUpcomingOrder } from "./CustomUpcomingOrder/index";
+export { CustomUpsell } from "./CustomUpsell/index";
+export { CustomPromo } from "./CustomPromo/index";
+export { CustomOrderHistory } from "./CustomOrderHistory/index";
 export * from "./pages";

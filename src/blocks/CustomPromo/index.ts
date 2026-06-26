@@ -2,14 +2,14 @@ import { defineBlock } from "@juo/blocks";
 import { createReactRenderer } from "@juo/blocks/react";
 import type { FromExtendedSchema, ExtendedJSONSchema } from "json-schema-to-ts";
 import { blockLocales } from "../../locales";
-import { BeautyPromo as BeautyPromoComponent } from "./BeautyPromo";
+import { CustomPromo as CustomPromoComponent } from "./CustomPromo";
 
 type Extensions = {
   "x-juo-control-type": "inline-text";
   "x-juo-group": string;
 };
 
-type BeautySchema = ExtendedJSONSchema<Extensions>;
+type CustomSchema = ExtendedJSONSchema<Extensions>;
 
 const schema = {
   type: "object",
@@ -30,7 +30,7 @@ const schema = {
         discountCode: {
           type: "string",
           "x-juo-control-type": "inline-text",
-          default: "BEAUTY20",
+          default: "CUSTOM20",
         },
         ctaText: {
           type: "string",
@@ -83,18 +83,18 @@ const schema = {
   },
   required: ["props"],
   additionalProperties: false,
-} as const satisfies BeautySchema;
+} as const satisfies CustomSchema;
 
 type Schema = FromExtendedSchema<Extensions, typeof schema>;
 
-export const BeautyPromo = defineBlock<Schema>("BeautyPromo", {
+export const CustomPromo = defineBlock<Schema>("CustomPromo", {
   group: "theme",
   schema,
   initialValue: () => ({
     props: {
       title: "Special Offer",
       description: "Apply your exclusive discount code",
-      discountCode: "BEAUTY20",
+      discountCode: "CUSTOM20",
       ctaText: "Apply code",
       appliedText: "Applied!",
       icon: "✨",
@@ -104,6 +104,6 @@ export const BeautyPromo = defineBlock<Schema>("BeautyPromo", {
       imageAlt: "Promo",
     },
   }),
-  renderer: createReactRenderer(BeautyPromoComponent),
-  locales: blockLocales("BeautyPromo"),
+  renderer: createReactRenderer(CustomPromoComponent),
+  locales: blockLocales("CustomPromo"),
 });

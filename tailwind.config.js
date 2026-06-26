@@ -11,8 +11,8 @@ export default {
       colors: {
         primary: "var(--primary)",
         muted: "var(--muted)",
-        "beauty-taupe": "var(--primary)",
-        "beauty-sand": "#C4A882",
+        "custom-taupe": "var(--primary)",
+        "custom-sand": "#C4A882",
       },
     },
   },

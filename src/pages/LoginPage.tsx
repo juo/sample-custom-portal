@@ -1,6 +1,6 @@
 export function LoginPage() {
   return (
-    <juo-page name="BeautyLoginPage">
+    <juo-page name="CustomLoginPage">
       <div
         style={{
           display: "flex",

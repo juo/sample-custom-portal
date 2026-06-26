@@ -1,129 +1,34 @@
-/* Design System Base Tokens (Medium Variant - Default) */
+/*
+ * Design tokens — sourced from the @juo/customer-ui design system.
+ *
+ * The canonical color palettes, surface/card tokens, mode-driven rounding, and
+ * the numeric space/font/radius base tokens come straight from the package so
+ * this sample tracks the design system instead of carrying a private fork.
+ *
+ * The block components below were authored against the older t-shirt utility
+ * scale (`p-xl`, `text-md`, `gap-md`, `rounded-card-1`, …). The compatibility
+ * layer in this file re-derives those t-shirt-named tokens from the design
+ * system's base tokens (`--space-base`, `--font-size-base`, `--radius-base`),
+ * so the existing Tailwind preset and component class names keep resolving to
+ * the exact same values — no visual change — while the source of truth is now
+ * @juo/customer-ui.
+ */
+@import "@juo/customer-ui/design-tokens.css";
+/* Theme-mode engine: maps data-* theme attributes (and provides the --theme-*
+   defaults) the tokens above read from. */
+@import "@juo/customer-ui/theme-modes.css";
+
+/* Base-unit aliases: bridge the design system's base tokens to the
+   t-shirt-scale names the utility tokens below are derived from. */
 :root,
 :host {
-  /* Size Variants - Medium (default) */
-  --spacing: var(--theme-spacing, 8px);
-  --padding: var(--theme-padding, 8px);
-  --font-size: var(--theme-font-size, 16px);
-  --radius: var(--theme-radius, 4px);
-
-  /* Base Colors */
-  --white: var(--theme-white, oklch(100% 0 0));
-  --black: var(--theme-black, oklch(0% 0 0));
-
-  /* Semantic Colors — Success */
-  --success-25: var(--theme-success-25, oklch(98.5% 0.015 145));
-  --success-50: var(--theme-success-50, oklch(96.5% 0.025 145));
-  --success-100: var(--theme-success-100, oklch(94% 0.04 145));
-  --success-200: var(--theme-success-200, oklch(89% 0.06 145));
-  --success-300: var(--theme-success-300, oklch(80% 0.08 145));
-  --success-400: var(--theme-success-400, oklch(68% 0.1 145));
-  --success-500: var(--theme-success-500, oklch(60% 0.12 145));
-  --success-600: var(--theme-success-600, oklch(52% 0.13 145));
-  --success-700: var(--theme-success-700, oklch(42% 0.12 145));
-  --success-800: var(--theme-success-800, oklch(30% 0.1 145));
-  --success-900: var(--theme-success-900, oklch(18% 0.06 145));
-
-  /* Semantic Colors — Warning */
-  --warning-25: var(--theme-warning-25, oklch(98.5% 0.015 85));
-  --warning-50: var(--theme-warning-50, oklch(96.5% 0.025 85));
-  --warning-100: var(--theme-warning-100, oklch(94% 0.04 85));
-  --warning-200: var(--theme-warning-200, oklch(89% 0.06 85));
-  --warning-300: var(--theme-warning-300, oklch(80% 0.09 85));
-  --warning-400: var(--theme-warning-400, oklch(68% 0.11 85));
-  --warning-500: var(--theme-warning-500, oklch(60% 0.12 85));
-  --warning-600: var(--theme-warning-600, oklch(52% 0.12 85));
-  --warning-700: var(--theme-warning-700, oklch(42% 0.1 85));
-  --warning-800: var(--theme-warning-800, oklch(30% 0.08 85));
-  --warning-900: var(--theme-warning-900, oklch(18% 0.05 85));
-
-  /* Semantic Colors — Error */
-  --error-25: var(--theme-error-25, oklch(98.5% 0.015 25));
-  --error-50: var(--theme-error-50, oklch(96.5% 0.025 25));
-  --error-100: var(--theme-error-100, oklch(93% 0.04 25));
-  --error-200: var(--theme-error-200, oklch(88% 0.06 25));
-  --error-300: var(--theme-error-300, oklch(78% 0.1 25));
-  --error-400: var(--theme-error-400, oklch(66% 0.13 25));
-  --error-500: var(--theme-error-500, oklch(58% 0.15 25));
-  --error-600: var(--theme-error-600, oklch(52% 0.15 25));
-  --error-700: var(--theme-error-700, oklch(42% 0.13 25));
-  --error-800: var(--theme-error-800, oklch(30% 0.1 25));
-  --error-900: var(--theme-error-900, oklch(18% 0.06 25));
-
-  /* Semantic Colors — Info */
-  --info-25: var(--theme-info-25, oklch(98.5% 0.015 230));
-  --info-50: var(--theme-info-50, oklch(96.5% 0.02 230));
-  --info-100: var(--theme-info-100, oklch(94% 0.03 230));
-  --info-200: var(--theme-info-200, oklch(89% 0.05 230));
-  --info-300: var(--theme-info-300, oklch(80% 0.07 230));
-  --info-400: var(--theme-info-400, oklch(68% 0.09 230));
-  --info-500: var(--theme-info-500, oklch(58% 0.1 230));
-  --info-600: var(--theme-info-600, oklch(50% 0.1 230));
-  --info-700: var(--theme-info-700, oklch(42% 0.09 230));
-  --info-800: var(--theme-info-800, oklch(30% 0.07 230));
-  --info-900: var(--theme-info-900, oklch(18% 0.04 230));
-
-  /* Callout Colors */
-  --callout-25: var(--theme-callout-25, oklch(98.5% 0 0));
-  --callout-50: var(--theme-callout-50, oklch(97% 0 0));
-  --callout-100: var(--theme-callout-100, oklch(95% 0 0));
-  --callout-200: var(--theme-callout-200, oklch(90% 0 0));
-  --callout-300: var(--theme-callout-300, oklch(82% 0 0));
-  --callout-400: var(--theme-callout-400, oklch(70% 0 0));
-  --callout-500: var(--theme-callout-500, oklch(62% 0 0));
-  --callout-600: var(--theme-callout-600, oklch(55% 0 0));
-  --callout-700: var(--theme-callout-700, oklch(45% 0 0));
-  --callout-800: var(--theme-callout-800, oklch(32% 0 0));
-  --callout-900: var(--theme-callout-900, oklch(18% 0 0));
-
-  /* Accent Colors */
-  --accent-white: var(--theme-accent-white, oklch(100% 0 0));
-  --accent-black: var(--theme-accent-black, oklch(0% 0 0));
-  --accent-25: var(--theme-accent-25, oklch(98.5% 0 0));
-  --accent-50: var(--theme-accent-50, oklch(97% 0 0));
-  --accent-100: var(--theme-accent-100, oklch(95% 0 0));
-  --accent-200: var(--theme-accent-200, oklch(90% 0 0));
-  --accent-300: var(--theme-accent-300, oklch(82% 0 0));
-  --accent-400: var(--theme-accent-400, oklch(70% 0 0));
-  --accent-500: var(--theme-accent-500, oklch(62% 0 0));
-  --accent-600: var(--theme-accent-600, oklch(55% 0 0));
-  --accent-700: var(--theme-accent-700, oklch(45% 0 0));
-  --accent-800: var(--theme-accent-800, oklch(32% 0 0));
-  --accent-900: var(--theme-accent-900, oklch(18% 0 0));
-
-  /* Secondary Colors (falls back to accent when not explicitly set) */
-  --secondary-white: var(--theme-secondary-white, var(--accent-white));
-  --secondary-black: var(--theme-secondary-black, var(--accent-black));
-  --secondary-25: var(--theme-secondary-25, var(--accent-25));
-  --secondary-50: var(--theme-secondary-50, var(--accent-50));
-  --secondary-100: var(--theme-secondary-100, var(--accent-100));
-  --secondary-200: var(--theme-secondary-200, var(--accent-200));
-  --secondary-300: var(--theme-secondary-300, var(--accent-300));
-  --secondary-400: var(--theme-secondary-400, var(--accent-400));
-  --secondary-500: var(--theme-secondary-500, var(--accent-500));
-  --secondary-600: var(--theme-secondary-600, var(--accent-600));
-  --secondary-700: var(--theme-secondary-700, var(--accent-700));
-  --secondary-800: var(--theme-secondary-800, var(--accent-800));
-  --secondary-900: var(--theme-secondary-900, var(--accent-900));
-
-  /* Tint Colors */
-  --tint-25: var(--theme-tint-25, oklch(98.5% 0 0));
-  --tint-50: var(--theme-tint-50, oklch(97% 0 0));
-  --tint-100: var(--theme-tint-100, oklch(95% 0 0));
-  --tint-200: var(--theme-tint-200, oklch(90% 0 0));
-  --tint-300: var(--theme-tint-300, oklch(82% 0 0));
-  --tint-400: var(--theme-tint-400, oklch(70% 0 0));
-  --tint-500: var(--theme-tint-500, oklch(62% 0 0));
-  --tint-600: var(--theme-tint-600, oklch(55% 0 0));
-  --tint-700: var(--theme-tint-700, oklch(45% 0 0));
-  --tint-800: var(--theme-tint-800, oklch(32% 0 0));
-  --tint-900: var(--theme-tint-900, oklch(18% 0 0));
-
-  --thumbnail-rounding: var(--theme-thumbnail-rounding, 50%);
-  --buttons-rounding: var(--theme-buttons-rounding, 4px);
+  --spacing: var(--space-base);
+  --padding: var(--space-base);
+  --font-size: var(--font-size-base);
+  --radius: var(--radius-base);
 }
 
-/* Utility Tokens - Font Size Scale */
+/* Font size scale (text-xs … text-2xl) */
 :root,
 :host {
   --text-xs: calc(var(--font-size) * 0.75);
@@ -134,7 +39,7 @@
   --text-2xl: calc(var(--font-size) * 2);
 }
 
-/* Utility Tokens - Radius Scale */
+/* Radius scale (rounded-none … rounded-xl) */
 :root,
 :host {
   --radius-none: calc(var(--radius) * 0);
@@ -146,7 +51,7 @@
   --radius-full: calc(var(--radius) * 100);
 }
 
-/* Utility Tokens - Spacing Scale */
+/* Spacing scale (gap/space utilities) */
 :root,
 :host {
   --spacing-xs: calc(var(--spacing) * 0.5);
@@ -158,7 +63,7 @@
   --spacing-3xl: calc(var(--spacing) * 6);
 }
 
-/* Utility Tokens - Padding Scale */
+/* Padding scale (p-* utilities) */
 :root,
 :host {
   --padding-xs: calc(var(--padding) * 0.5);
@@ -168,50 +73,4 @@
   --padding-xl: calc(var(--padding) * 3);
   --padding-2xl: calc(var(--padding) * 4.5);
   --padding-3xl: calc(var(--padding) * 6);
-}
-
-/* Component Tokens - Card Radius */
-:root,
-:host {
-  --card-radius-1: var(--radius-md);
-  --card-radius-2: var(--radius-sm);
-  --card-radius-3: var(--radius-xs);
-}
-
-/* Surface Tokens */
-:root,
-:host {
-  --surface-1: var(--theme-surface-1, transparent);
-  --surface-1-border: var(--theme-surface-1-border, transparent);
-  --surface-2: var(--theme-surface-2, var(--white));
-  --surface-2-border: var(--theme-surface-2-border, var(--tint-300));
-  --surface-3: var(--theme-surface-3, transparent);
-  --surface-3-border: var(--theme-surface-3-border, transparent);
-}
-
-/* Card Divider Tokens */
-:root,
-:host {
-  --card-divider-margin: var(--theme-card-divider-margin, var(--spacing-sm));
-  --card-divider-height: var(--theme-card-divider-height, 0);
-  --card-divider-background: var(--theme-card-divider-background, transparent);
-}
-
-/* Card Tokens - Map surface tokens to card-specific names */
-:root,
-:host {
-  --card-1-background: var(--surface-1);
-  --card-1-border: var(--surface-1-border);
-  --card-2-background: var(--surface-2);
-  --card-2-border: var(--surface-2-border);
-  --card-3-background: var(--surface-3);
-  --card-3-border: var(--surface-3-border);
-}
-
-/* Card Level Detection - Default to level 1 */
-:root,
-:host {
-  --card-background: var(--card-1-background);
-  --card-border: var(--card-1-border);
-  --card-radius: var(--card-radius-1);
 }
